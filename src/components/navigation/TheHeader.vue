@@ -36,7 +36,7 @@
                 <v-tooltip bottom v-if="getAppLocale == 'ar'">
                   <template v-slot:activator="{ on, attrs }">
                     <button class="lang_toggeler_btn" @click="changeAppLanguage('en')" v-bind="attrs" v-on="on">
-                      En
+                      English
                     </button>
                   </template>
                   <span class="toolTip">{{
@@ -58,13 +58,13 @@
 
               <!-- ********** Start:: Notification Button ********** -->
               <div class="user_notification_content_wrapper">
-                <router-link to="/all-notifications/all">
+                <!-- <router-link to="/all-notifications/all">
                   <a-badge :count="notificationsData.unreadNotifications" :overflow-count="9">
                     <button aria-label="notification_btn" class="notification_btn">
                       <i class="fal fa-bell"></i>
                     </button>
                   </a-badge>
-                </router-link>
+                </router-link> -->
 
                 <!-- <a-badge :count="notificationsData.unreadNotifications" :overflow-count="9" >
                   <button aria-label="notification_btn" class="notification_btn" @click.stop="

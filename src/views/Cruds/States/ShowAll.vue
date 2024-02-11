@@ -259,7 +259,7 @@ export default {
         },
         {
           text: this.$t("SIDENAV.Cities.name"),
-          value: "city.name",
+          value: "country.name",
           sortable: false,
           align: "center",
         },
@@ -277,7 +277,6 @@ export default {
           sortable: false,
           width: "120",
         },
-
         {
           text: this.$t("TABLES.StoresTypes.actions"),
           value: "actions",
@@ -431,7 +430,7 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: `cities`,
+          url: `countries`,
         });
         this.allCities = res.data.data;
       } catch (error) {

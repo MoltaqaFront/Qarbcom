@@ -9,26 +9,23 @@
     <!-- Start:: Single Step Form Content -->
     <div class="single_step_form_content_wrapper">
       <form @submit.prevent="validateFormInputs">
-        <div class="row">
+        <div class="row align-items-center">
 
           <!-- Start:: Receiver Type Input -->
           <base-select-input col="6" :optionsList="receiverTypes" :placeholder="$t('TABLES.Notifications.receiverType')"
-            v-model="data.receiverType" required multiple @input="getMethods" @remove="toggleUnSelectMarket" />
+            v-model="data.receiverType" required @input="getMethods" multiple />
           <!-- End:: Receiver Type Input -->
 
-          <div class="col-6" v-for="(item, index) in data.receiverType" :key="index">
+          <div class="col-6" v-for="(item, index) in data.receiverType" :key="'k' + index">
 
             <div class="row">
-              <base-select-input v-if="users.length && item.value === 'users'" class="col-12" :optionsList="users"
-                :placeholder="$t('TITLES.users')" v-model="data.users" required multiple />
+              <base-select-input v-if="(item && item.value === 'clients' && clients.length)" class="col-12"
+                :optionsList="clients" :placeholder="$t('PLACEHOLDERS.service_requester')" v-model="data.clients" required
+                multiple @input="handleClientSelectionChange" />
 
-              <base-select-input v-if="stores.length && item.value === 'stores'
-                " class="col-12" :optionsList="stores" :placeholder="$t('TITLES.stores')" v-model="data.stores"
-                required multiple />
-
-              <base-select-input v-if="drivers.length && item.value === 'drivers'
-                " class="col-12" :optionsList="drivers" :placeholder="$t('PLACEHOLDERS.drivers')"
-                v-model="data.drivers" required multiple />
+              <base-select-input v-if="(item && item.value === 'providers' && providers.length)" class="col-12"
+                :optionsList="providers" :placeholder="$t('PLACEHOLDERS.service_provider')" v-model="data.providers"
+                required multiple @input="handleProviderSelectionChange" />
             </div>
 
           </div>
@@ -77,30 +74,34 @@ export default {
   name: "CreateNotification",
 
   computed: {
-    // Start:: Vuex Getters
-    ...mapGetters({
-      allClientsData: "ApiGetsModule/allClientsData",
-      allDriversData: "ApiGetsModule/allDriversData",
-    }),
-    // End:: Vuex Getters
 
     receiverTypes() {
       return [
         {
           id: 1,
-          name: this.$t("TITLES.users"),
-          value: "users",
+          name: this.$t("PLACEHOLDERS.service_requester"),
+          value: "clients",
         },
-        {
-          id: 2,
-          name: this.$t("PLACEHOLDERS.drivers"),
-          value: "drivers",
-        },
+        // {
+        //   id: 2,
+        //   name: this.$t("PLACEHOLDERS.all_service_requester"),
+        //   value: "all_clients",
+        // },
         {
           id: 3,
-          name: this.$t("TITLES.stores"),
-          value: "stores",
+          name: this.$t("PLACEHOLDERS.service_provider"),
+          value: "providers",
         },
+        // {
+        //   id: 4,
+        //   name: this.$t("PLACEHOLDERS.all_service_provider"),
+        //   value: "all_providers",
+        // },
+        // {
+        //   id: 5,
+        //   name: this.$t("STATUS.all"),
+        //   value: "all",
+        // },
       ];
     },
   },
@@ -115,16 +116,15 @@ export default {
       // Start:: Data Collection To Send
       data: {
         receiverType: null,
-        users: null,
-        drivers: null,
-        stores: null,
+        clients: null,
+        providers: null,
         titleAr: null,
         titleEn: null,
         contentAr: null,
         contentEn: null,
       },
-      users: [],
-      drivers: [],
+      clients: [],
+      providers: [],
       stores: [],
       // End:: Data Collection To Send
 
@@ -132,15 +132,6 @@ export default {
   },
 
   methods: {
-
-    // Start:: Vuex Actions
-
-    ...mapActions({
-      getClients: "ApiGetsModule/getClients",
-      getDrivers: "ApiGetsModule/getDrivers",
-    }),
-
-    // End:: Vuex Actions
 
     // Start:: validate Form Inputs
     validateFormInputs() {
@@ -197,20 +188,74 @@ export default {
 
     // Start:: Submit Form
     async submitForm() {
+      this.isWaitingRequest = true;
+
       const REQUEST_DATA = new FormData();
       // Start:: Append Request Data
 
-      this.data.receiverType.forEach((receiverType) => {
-        const type = receiverType.value;
-        const selectedItems = this.data[type];
+      if (this.data.receiverType.length >= 2) {
+        REQUEST_DATA.append(`receiver_type`, "all");
+        this.data.receiverType.forEach((main) => {
 
-        if (selectedItems) {
-          selectedItems.forEach((element) => {
-            REQUEST_DATA.append(`users[${type}][]`, element.id);
-          });
-        }
-      });
+          if (main.value == "clients") {
 
+            this.data.clients.forEach((element, index) => {
+
+              if (element.value == 'all') {
+                REQUEST_DATA.append(`roles[]`, "client");
+              } else {
+                REQUEST_DATA.append(`client_ids[${index}]`, element.id);
+              }
+            });
+
+          }
+
+          else if (main.value == "providers") {
+            this.data.providers.forEach((element, index) => {
+
+              if (element.value == 'all') {
+                REQUEST_DATA.append(`roles[]`, "provider");
+              } else {
+                REQUEST_DATA.append(`provider_ids[${index}]`, element.id);
+              }
+            });
+          }
+
+        })
+
+      } else {
+        this.data.receiverType.forEach((main) => {
+
+          if (main.value == "clients") {
+
+            this.data.clients.forEach((element, index) => {
+
+              if (element.value == 'all') {
+                REQUEST_DATA.append(`roles[]`, "client");
+                REQUEST_DATA.append(`receiver_type`, "client");
+              } else {
+                REQUEST_DATA.append(`client_ids[${index}]`, element.id);
+                REQUEST_DATA.append(`receiver_type`, "client");
+              }
+            });
+
+          }
+
+          else if (main.value == "providers") {
+            this.data.providers.forEach((element, index) => {
+
+              if (element.value == 'all') {
+                REQUEST_DATA.append(`roles[]`, "provider");
+                REQUEST_DATA.append(`receiver_type`, "provider");
+              } else {
+                REQUEST_DATA.append(`provider_ids[${index}]`, element.id);
+                REQUEST_DATA.append(`receiver_type`, "provider");
+              }
+            });
+          }
+
+        })
+      }
 
       REQUEST_DATA.append("title[ar]", this.data.titleAr);
       REQUEST_DATA.append("title[en]", this.data.titleEn);
@@ -221,7 +266,7 @@ export default {
       try {
         await this.$axios({
           method: "POST",
-          url: `admin/send-notification`,
+          url: `notification/store`,
           data: REQUEST_DATA,
         });
         this.isWaitingRequest = false;
@@ -234,70 +279,83 @@ export default {
     },
     // End:: Submit Form
 
-    async getUsers() {
+    async getClients() {
       this.loading = true;
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "admin/get-users",
+          url: "clients",
+          params: {
+            "status": 1
+          }
         });
         this.loading = false;
-        this.users = res.data.body.users;
+        this.clients = res.data.data;
+        this.clients.unshift({ name: this.$t('STATUS.all'), value: 'all' })
+
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
       }
     },
 
-    async getDrivers() {
+    async getProviders() {
       this.loading = true;
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "admin/get-drivers",
+          url: "allProviders",
+          params: {
+            "status": 1
+          }
         });
         this.loading = false;
-        this.drivers = res.data.body.drivers;
+        this.providers = res.data.data;
+        this.providers.unshift({ name: this.$t('STATUS.all'), value: 'all' })
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
       }
     },
 
-    async getStores() {
-      this.loading = true;
-      try {
-        let res = await this.$axios({
-          method: "GET",
-          url: "admin/get-stores"
-        });
-        this.loading = false;
-        this.stores = res.data.body.stores;
-      } catch (error) {
-        this.loading = false;
-        console.log(error.response.data.message);
-      }
+    handleClientSelectionChange() {
+      // Check if "all" is selected, and if so, clear other selections
+      this.data.clients.forEach((item) => {
+        if (item.value == 'all') {
+          this.data.clients = [{ name: this.$t('STATUS.all'), value: 'all' }];
+        } else {
+          this.getClients();
+        }
+      })
+
+    },
+
+    handleProviderSelectionChange() {
+      this.data.providers.forEach((item) => {
+        if (item.value == 'all') {
+          this.data.providers = [{ name: this.$t('STATUS.all'), value: 'all' }];
+        } else {
+          this.getProviders();
+        }
+      })
     },
 
     getMethods() {
 
+      // this.data.clients = null;
+      // this.data.providers = null;
 
-      this.data.receiverType.forEach((ele) => {
+      this.data.receiverType.forEach((item) => {
 
-        if (ele.value === "users") {
+        if (item.value === "clients") {
           // this.data.users = [];
-          this.getUsers();
-        } else if (ele.value === "drivers") {
+          this.getClients();
+        } else if (item.value === "providers") {
           // this.data.drivers = [];
-          this.getDrivers();
-        } else if (ele.value === "stores") {
-          // this.data.stores = [];
-          this.getStores();
-        } else {
-          ele.value = null;
+          this.getProviders();
         }
-      })
 
+      })
 
     },
 
@@ -305,9 +363,8 @@ export default {
   },
 
   created() {
-    this.getUsers();
-    this.getDrivers();
-    this.getStores();
+    this.getClients();
+    this.getProviders();
   },
 };
 </script>

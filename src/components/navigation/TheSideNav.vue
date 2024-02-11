@@ -29,6 +29,20 @@
       </div>
       <!-- End:: Home Route -->
 
+      <!-- Start:: notifications Route -->
+      <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')"
+        v-if="$can('notifications index', 'notifications')">
+        <router-link to="/all-notifications/all">
+          <span class="route_icon">
+            <img src="@/assets/media/icons/ui_icons/notifications.svg" alt="icon" width="40" height="40" />
+          </span>
+          <span class="route_text">
+            {{ $t("SIDENAV.notifications.title") }}
+          </span>
+        </router-link>
+      </div>
+      <!-- End:: notifications Route -->
+
       <!-- Start:: clients Route -->
       <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('clients index', 'clients')">
         <router-link to="/clients/all">
@@ -37,6 +51,33 @@
           </span>
           <span class="route_text">
             {{ $t("SIDENAV.Clients.title") }}
+          </span>
+        </router-link>
+      </div>
+      <!-- End:: clients Route -->
+
+      <!-- Start:: orders Route -->
+      <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('orders index', 'orders')">
+        <router-link to="/orders/all">
+          <span class="route_icon">
+            <img src="@/assets/media/icons/ui_icons/booking.svg" alt="icon" width="40" height="40" />
+          </span>
+          <span class="route_text">
+            {{ $t("CHARTS.orders") }}
+          </span>
+        </router-link>
+      </div>
+      <!-- End:: clients Route -->
+
+      <!-- Start:: postponeorders Route -->
+      <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')"
+        v-if="$can('postponeOrders index', 'postponeOrders')">
+        <router-link to="/postponeorders/all">
+          <span class="route_icon">
+            <img src="@/assets/media/icons/ui_icons/booking.svg" alt="icon" width="40" height="40" />
+          </span>
+          <span class="route_text">
+            {{ $t("PLACEHOLDERS.trip_postponement_requests") }}
           </span>
         </router-link>
       </div>
@@ -75,9 +116,42 @@
       </div>
       <!-- End:: Side Nav Routes -->
 
-      <!-- Start:: Cities Route -->
-      <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('cities index', 'cities')">
-        <router-link to="/cities/all">
+      <!-- Start:: Side Nav reports Routes -->
+      <div class="side_routes_wrapper">
+        <a-menu style="width: 100%" mode="vertical" :open-keys="openKeys" @openChange="onOpenChange">
+          <!-- Start:: Side Nav Tab -->
+          <a-sub-menu v-for="item in sideNavbarList_reports" :key="item.key"
+            :data-type="!item.children ? 'single_route' : ''" v-if="item.children">
+            <template>
+              <!-- ========= Start:: Main Tab -->
+              <span slot="title" v-if="item.hasPermission">
+                <img :src="item.icon" alt="icon" width="35" height="35" />
+                <span> {{ item.title }} </span>
+              </span>
+              <!-- ========= End:: Main Tab -->
+
+              <!-- ========= Start:: Nested Tabs -->
+              <!--  -->
+              <a-menu-item v-for="childItem in item.children" :key="childItem.key" v-if="childItem.hasPermission">
+                <button class="text-start w-100" @click="$emit('fireToggleNavDrawerEmit')">
+                  <router-link :to="childItem.route">
+                    <i class="fad fa-circle"></i>
+                    {{ childItem.title }}
+                  </router-link>
+                </button>
+              </a-menu-item>
+              <!-- ========= End:: Nested Tabs -->
+            </template>
+
+          </a-sub-menu>
+          <!-- End:: Side Nav Tab -->
+        </a-menu>
+      </div>
+      <!-- End:: Side Nav reports Routes -->
+
+      <!-- Start:: countries Route -->
+      <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('countries index', 'countries')">
+        <router-link to="/countries/all">
           <span class="route_icon">
             <img src="@/assets/media/icons/ui_icons/areas.svg" alt="icon" width="40" height="40" />
           </span>
@@ -86,7 +160,7 @@
           </span>
         </router-link>
       </div>
-      <!-- End:: Cities Route -->
+      <!-- End:: countries Route -->
 
       <!-- Start:: districts Route -->
       <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('districts index', 'districts')">
@@ -127,6 +201,45 @@
       </div>
       <!-- End:: ads Route -->
 
+      <!-- Start:: offers Route -->
+      <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('offers index', 'offers')">
+        <router-link to="/offers/all">
+          <span class="route_icon">
+            <img src="@/assets/media/icons/ui_icons/offers.svg" alt="icon" width="40" height="40" />
+          </span>
+          <span class="route_text">
+            {{ $t("SIDENAV.Offers.title") }}
+          </span>
+        </router-link>
+      </div>
+      <!-- End:: offers Route -->
+
+      <!-- Start:: complaints Route -->
+      <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('complaints index', 'complaints')">
+        <router-link to="/complaints/all">
+          <span class="route_icon">
+            <img src="@/assets/media/icons/ui_icons/service.svg" alt="icon" width="40" height="40" />
+          </span>
+          <span class="route_text">
+            {{ $t("PLACEHOLDERS.complaints") }}
+          </span>
+        </router-link>
+      </div>
+      <!-- End:: complaints Route -->
+
+      <!-- Start:: rates Route -->
+      <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('rates index', 'rates')">
+        <router-link to="/rates/all">
+          <span class="route_icon">
+            <img src="@/assets/media/icons/ui_icons/star.svg" alt="icon" width="40" height="40" />
+          </span>
+          <span class="route_text">
+            {{ $t("PLACEHOLDERS.rates") }}
+          </span>
+        </router-link>
+      </div>
+      <!-- End:: rates Route -->
+
       <!-- Start:: vehicleTypes Route -->
       <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('vehicleTypes index', 'vehicleTypes')">
         <router-link to="/vehicleTypes/all">
@@ -139,6 +252,19 @@
         </router-link>
       </div>
       <!-- End:: vehicleTypes Route -->
+
+      <!-- Start:: vehicles Route -->
+      <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('vehicles index', 'vehicles')">
+        <router-link to="/vehicles/all">
+          <span class="route_icon">
+            <img src="@/assets/media/icons/ui_icons/car.svg" alt="icon" width="40" height="40" />
+          </span>
+          <span class="route_text">
+            {{ $t("PLACEHOLDERS.service_provider_vehicles") }}
+          </span>
+        </router-link>
+      </div>
+      <!-- End:: Home Route -->
 
       <!-- Start:: anchors Route -->
       <div class="home_route" @click="$emit('fireToggleNavDrawerEmit')" v-if="$can('anchors index', 'anchors')">
@@ -367,25 +493,25 @@ export default {
               key: "aboutUs",
               title: this.$t("SIDENAV.AppContent.aboutUs"),
               route: "/app-content/about-us",
-              // hasPermission: $can('additionalServices index', 'additionalServices'),
+              hasPermission: this.$can('staticPages index', 'staticPages'),
             },
             {
               key: "termsAndConditions",
               title: this.$t("SIDENAV.AppContent.termsAndConditions"),
               route: "/app-content/terms",
-              // hasPermission: $can('additionalServices index', 'additionalServices'),
+              hasPermission: this.$can('staticPages index', 'staticPages'),
             },
             {
               key: "privacyPolicy",
               title: this.$t("SIDENAV.AppContent.privacyPolicy"),
               route: "/app-content/policy",
-              // hasPermission: $can('additionalServices index', 'additionalServices'),
+              hasPermission: this.$can('staticPages index', 'staticPages'),
             },
             {
               key: "contact",
               title: this.$t("PLACEHOLDERS.contact_admins"),
               route: "/contact_settings",
-              // hasPermission: $can('settings create', 'settings'),
+              hasPermission: this.$can('staticPages index', 'staticPages'),
             },
           ],
         },
@@ -416,6 +542,47 @@ export default {
               title: this.$t("PLACEHOLDERS.providers-employee"),
               route: "/providers-employee/all",
               hasPermission: this.$can('providers index', 'providers'),
+            },
+            {
+              key: "service_provider_edit_requests",
+              title: this.$t("PLACEHOLDERS.service_provider_edit_requests"),
+              route: "/service_provider_edit_requests/all",
+              hasPermission: this.$can('providers index', 'providers'),
+            },
+          ],
+        },
+
+      ],
+      sideNavbarList_reports: [
+        {
+          key: "reports",
+          title: this.$t("PLACEHOLDERS.reports"),
+          icon: require("@/assets/media/icons/ui_icons/bill.svg"),
+          hasPermission: this.$can('reports index', 'reports'),
+          children: [
+            {
+              key: "customer-report",
+              title: this.$t("PLACEHOLDERS.customer_reports"),
+              route: "/customer-reports/all",
+              hasPermission: this.$can('reports index', 'reports'),
+            },
+            {
+              key: "boat_reports",
+              title: this.$t("PLACEHOLDERS.boat_reports"),
+              route: "/boat-reports/all",
+              hasPermission: this.$can('reports index', 'reports'),
+            },
+            {
+              key: "completed_orders_reports",
+              title: this.$t("PLACEHOLDERS.completed_orders_reports"),
+              route: "/completed-orders-report/all",
+              hasPermission: this.$can('reports index', 'reports'),
+            },
+            {
+              key: "incomplete_orders_reports",
+              title: this.$t("PLACEHOLDERS.incomplete_orders_reports"),
+              route: "/incomplete-orders-report/all",
+              hasPermission: this.$can('reports index', 'reports'),
             },
           ],
         },

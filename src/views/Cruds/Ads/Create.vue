@@ -51,7 +51,7 @@
     </div>
     <!-- END:: Single Step Form Content -->
   </div>
-</template>
+</template> 
 
 <script>
 import moment from "moment";
@@ -142,6 +142,7 @@ export default {
 
     // Start:: Submit Form
     async submitForm() {
+
       const REQUEST_DATA = new FormData();
       // Start:: Append Request Data
 

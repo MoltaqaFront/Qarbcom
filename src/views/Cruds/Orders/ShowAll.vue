@@ -1,5 +1,5 @@
 <template>
-  <div class="show_all_content_wrapper" v-if="permissions">
+  <div class="show_all_content_wrapper">
     <!-- Start:: Main Section -->
     <main>
       <!--  =========== Start:: Filter Form =========== -->
@@ -14,38 +14,39 @@
           <form @submit.prevent="submitFilterForm">
             <div class="row justify-content-center align-items-center w-100">
               <!-- Start:: Order Number Input -->
-              <base-input col="4" type="number" :placeholder="$t('PLACEHOLDERS.orderNumber')"
+              <base-input col="3" type="number" :placeholder="$t('PLACEHOLDERS.orderNumber')"
                 v-model="filterOptions.orderNumber" />
               <!-- End:: Order Number Input -->
 
-              <!-- Start:: Order Type Input -->
-              <base-select-input col="4" :optionsList="allOrderTypes" :placeholder="$t('PLACEHOLDERS.orderType')"
-                v-model="filterOptions.orderType" />
-              <!-- End:: Order Type Input -->
-
               <!-- Start:: Client Name Input -->
-              <base-input col="4" type="text" :placeholder="$t('PLACEHOLDERS.clientName')"
+              <base-input col="3" type="text" :placeholder="$t('PLACEHOLDERS.clientName')"
                 v-model="filterOptions.clientName" />
               <!-- End:: Client Name Input -->
 
               <!-- Start:: Driver Name Input -->
-              <base-input col="4" type="text" :placeholder="$t('PLACEHOLDERS.clientPhone')"
-                v-model="filterOptions.driverPhone" />
+              <base-input col="3" type="text" :placeholder="$t('PLACEHOLDERS.clientPhone')"
+                v-model="filterOptions.clientPhone" />
               <!-- End:: Driver Name Input -->
+              <!-- Start:: Name Input -->
+              <base-input col="3" type="text" :placeholder="$t('PLACEHOLDERS.company_name')"
+                v-model.trim="filterOptions.company_name" />
+              <!-- End:: Name Input -->
 
+              <base-select-input col="3" :optionsList="providers" :placeholder="$t('PLACEHOLDERS.name_provider')"
+                v-model="filterOptions.name" />
 
-              <!-- Start:: Driver Name Input -->
-              <base-select-input col="4" :optionsList="AllDrivers" :placeholder="$t('PLACEHOLDERS.driverName')"
-                v-model="filterOptions.driverName" />
-              <!-- End:: Driver Name Input -->
-
-
-
-              <base-select-input col="4" :optionsList="allStores" :placeholder="$t('PLACEHOLDERS.store')"
-                v-model="filterOptions.store_id" required />
+              <!-- Start:: Name Input -->
+              <base-input col="3" type="text" :placeholder="$t('PLACEHOLDERS.provider_code')"
+                v-model.trim="filterOptions.provider_code" />
+              <!-- End:: Name Input -->
 
               <!-- Start:: Status Input -->
-              <base-select-input col="4" :optionsList="allStatus" :placeholder="$t('PLACEHOLDERS.status')"
+              <base-select-input col="3" :optionsList="Types" :placeholder="$t('PLACEHOLDERS.provider_type')"
+                v-model="filterOptions.type" />
+              <!-- End:: Status Input -->
+
+              <!-- Start:: Status Input -->
+              <base-select-input col="3" :optionsList="allStatus" :placeholder="$t('PLACEHOLDERS.status')"
                 v-model="filterOptions.status" />
               <!-- End:: Status Input -->
 
@@ -88,87 +89,34 @@
         </template>
         <!-- Start:: No Data State -->
 
-        <!-- Start:: Service -->
-        <!-- <template v-slot:[`item.service`]="{ item }">
-          <p class="blue-grey--text text--darken-1 fs-3" v-if="!item.service">-</p>
-          <v-chip v-else color="light-blue darken-2" text-color="white" small>
-            {{ item.service_type }} - {{ item.service }}
-          </v-chip>
-        </template> -->
-        <!-- End:: Service -->
+        <template v-slot:[`item.serialNumber`]="{ item }">
+          <p class="blue-grey--text text--darken-1 fs-3" v-if="!item.serialNumber">-</p>
+          <p v-else>{{ item.serialNumber }}</p>
+        </template>
 
-        <template v-slot:[`item.store`]="{ item }">
-          <p class="blue-grey--text text--darken-1 fs-3" v-if="!item.store">-</p>
-          <p v-else>{{ item.store.title }}</p>
+        <template v-slot:[`item.provider.code`]="{ item }">
+          <p class="blue-grey--text text--darken-1 fs-3" v-if="!item.provider.code">-</p>
+          <p v-else>{{ item.provider.code }}</p>
         </template>
 
         <!-- Start:: Driver -->
-        <template v-slot:[`item.driver.name`]="{ item }">
-          <p class="blue-grey--text text--darken-1 fs-3" v-if="!item.driver">-</p>
-          <p v-else>{{ item.driver.name }}</p>
+        <template v-slot:[`item.provider.company_name`]="{ item }">
+          <p class="blue-grey--text text--darken-1 fs-3" v-if="!item.provider.company_name">-</p>
+          <p v-else>{{ item.provider.company_name }}</p>
         </template>
         <!-- End:: Driver -->
-
-        <!-- Start:: Price -->
-        <!-- <template v-slot:[`item.total`]="{ item }">
-          <p class="text-success fs-3" v-if="item.total">-</p>
-          <p class="text-success fs-6" v-else>{{ item.total }}</p>
-        </template> -->
-        <!-- End:: Price -->
 
         <!-- Start:: Order Status -->
         <template v-slot:[`item.status`]="{ item }">
           <v-chip color="secondary" text-color="white" small>
             {{ item.status }}
           </v-chip>
-          <!-- <v-chip v-else-if="item.status === 'approved'" color="deep-purple darken-1" text-color="white" small>
-            {{ $t("STATUS.approved") }}
-          </v-chip>
-          <v-chip v-else-if="item.status === 'in_way'" color="orange darken-4" text-color="white" small>
-            {{ $t("STATUS.inWay") }}
-          </v-chip>
-          <v-chip v-else-if="item.status === 'processing'" color="yellow darken-3" text-color="white" small>
-            {{ $t("STATUS.processing") }}
-          </v-chip>
-          <v-chip v-else-if="item.status === 'done'" color="green darken-1" text-color="white" small>
-            {{ $t("STATUS.done") }}
-          </v-chip>
-          <v-chip v-else-if="item.status === 'cancelled'" color="red darken-2" text-color="white" small>
-            {{ $t("STATUS.canceled") }}
-          </v-chip> -->
         </template>
         <!-- Start:: Order Status -->
 
         <!-- Start:: Actions -->
         <template v-slot:[`item.actions`]="{ item }">
           <div class="actions">
-            <a-tooltip placement="bottom" v-if="permissions.show">
-              <template slot="title">
-                <span>{{ $t("BUTTONS.show") }}</span>
-              </template>
-              <button class="btn_show" @click="showItem(item)">
-                <i class="fal fa-eye"></i>
-              </button>
-            </a-tooltip>
-
-            <a-tooltip placement="bottom">
-              <template slot="title">
-                <span>{{ $t("BUTTONS.edit") }}</span>
-              </template>
-
-              <button class="btn_edit" @click="selectDeleteItem(item)">
-                <i class="fal fa-edit"></i>
-              </button>
-            </a-tooltip>
-
-            <!-- <a-tooltip placement="bottom" v-if="permissions.delete">
-              <template slot="title">
-                <span>{{ $t("BUTTONS.delete") }}</span>
-              </template>
-              <button class="btn_delete" @click="selectDeleteItem(item)">
-                <i class="fal fa-trash-alt"></i>
-              </button>
-            </a-tooltip> -->
 
             <a-tooltip placement="bottom">
               <template slot="title">
@@ -180,51 +128,22 @@
               </button>
             </a-tooltip>
 
-            <template v-if="!permissions.show && !permissions.delete">
+            <a-tooltip placement="bottom" v-if="$can('orders create', 'orders')">
+              <template slot="title">
+                <span>{{ $t("BUTTONS.show") }}</span>
+              </template>
+              <button class="btn_show" @click="showItem(item)">
+                <i class="fal fa-eye"></i>
+              </button>
+            </a-tooltip>
+
+            <template v-else>
               <i class="fal fa-lock-alt fs-5 blue-grey--text text--darken-1"></i>
             </template>
           </div>
         </template>
         <!-- End:: Actions -->
 
-        <!-- ======================== Start:: Dialogs ======================== -->
-        <template v-slot:top>
-          <!-- Start:: Delete Modal -->
-          <v-dialog v-model="dialogDelete">
-            <v-card>
-              <v-card-title class="text-h5 justify-center w-100" v-if="itemToDelete">
-                {{ $t("MESSAGES.changeItem", { name: itemToDelete.id }) }}
-
-
-                <div class="filter_form_wrapper w-100">
-                  <form class="w-100">
-                    <base-select-input col="12" :optionsList="allStatus" :placeholder="$t('PLACEHOLDERS.status')"
-                      v-model="status_modal" />
-
-                    <div class="form-group"
-                      v-if="(status_modal && status_modal.key === 'rejected') || (status_modal && status_modal.key === 'canceled')">
-                      <base-input col="12" rows="3" type="textarea" :placeholder="$t('PLACEHOLDERS.reason')"
-                        v-model="reason" required />
-                    </div>
-
-                  </form>
-                </div>
-
-
-              </v-card-title>
-              <v-card-actions>
-                <v-btn class="modal_confirm_btn" @click="confirmChangeStatus">{{
-                  $t("BUTTONS.ok")
-                }}</v-btn>
-
-                <v-btn class="modal_cancel_btn" @click="dialogDelete = false">{{ $t("BUTTONS.cancel") }}</v-btn>
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <!-- End:: Delete Modal -->
-        </template>
-        <!-- ======================== End:: Dialogs ======================== -->
       </v-data-table>
       <!--  =========== End:: Data Table =========== -->
     </main>
@@ -256,33 +175,96 @@
           <table class="table table-striped">
             <tbody>
               <tr class="text-center">
-                <td>{{ $t("TABLES.Orders.clientName") }}</td>
-                <td>{{ itemReportUserName }}</td>
+                <!-- <td>
+                  <span>{{ $t("TABLES.Rates.serialNumber") }}</span>
+                  <span>{{ $t("TABLES.Rates.serialNumber") }}</span>
+                </td>
+                <td>
+                  <span>{{ $t("TABLES.Rates.serialNumber") }}</span>
+                  <span>{{ $t("TABLES.Rates.serialNumber") }}</span>
+                </td> -->
               </tr>
+
               <tr class="text-center">
-                <td>{{ $t("PLACEHOLDERS.clientPhone") }}</td>
-                <td>{{ itemReportClientPhone }}</td>
+                <td>{{ $t("PLACEHOLDERS.quick_response_code") }}</td>
+                <!-- <td>{{ quick_response_code }}</td> -->
               </tr>
+
               <tr class="text-center">
-                <td>{{ $t("TABLES.Orders.orderType") }}</td>
-                <td>{{ itemReportOrderType }}</td>
+                <td>{{ $t("TABLES.Rates.serialNumber") }}</td>
+                <td>{{ serialNumber }}</td>
               </tr>
+
               <tr class="text-center">
-                <td>{{ $t("TABLES.Orders.driverName") }}</td>
-                <td>{{ itemReportDriverName }}</td>
+                <td>{{ $t("PLACEHOLDERS.invoice_issue_date") }}</td>
+                <td>{{ invoice_issue_date }}</td>
               </tr>
+
               <tr class="text-center">
-                <td>{{ $t("TABLES.Orders.totalPrice") }}</td>
-                <td>{{ itemReportTotalPrice }}</td>
+                <td>{{ $t("PLACEHOLDERS.name_provider") }}</td>
+                <td>{{ name_provider }}</td>
               </tr>
+
               <tr class="text-center">
-                <td>{{ $t("TABLES.Orders.orderStatus") }}</td>
-                <td>{{ itemReportOrderStatus }}</td>
+                <td>{{ $t("PLACEHOLDERS.company_name") }}</td>
+                <td>{{ company_name }}</td>
               </tr>
+
               <tr class="text-center">
-                <td>{{ $t("TABLES.Orders.orderDate") }}</td>
-                <td>{{ itemReportOrderDate }}</td>
+                <td>{{ $t("PLACEHOLDERS.tax_number") }}</td>
+                <td>{{ tax_number }}</td>
               </tr>
+
+              <tr class="text-center">
+                <td>{{ $t("PLACEHOLDERS.service_provider_address") }}</td>
+                <td>{{ service_provider_address }}</td>
+              </tr>
+
+              <tr class="text-center">
+                <td>{{ $t("PLACEHOLDERS.boat_name") }}</td>
+                <td>{{ boat_name }}</td>
+              </tr>
+
+              <tr class="text-center">
+                <td>{{ $t("PLACEHOLDERS.number_of_individuals") }}</td>
+                <td>{{ number_of_individuals }}</td>
+              </tr>
+
+              <tr class="text-center">
+                <td>{{ $t("PLACEHOLDERS.total_trip_price") }}</td>
+                <td>{{ total_trip_price }}</td>
+              </tr>
+
+              <tr class="text-center" v-for="(item, index) in companion_service" :key="'p' + index">
+
+                <td>
+                  <span>{{ $t("PLACEHOLDERS.companion_service_name") }} : </span>
+                  <span>{{ item.name }}</span>
+                </td>
+                <td>
+                  <span>{{ $t("PLACEHOLDERS.companion_service_price") }} : </span>
+                  <span>{{ item.price }}</span>
+                </td>
+
+                <!-- <td>{{ $t("PLACEHOLDERS.companion_service_name") }}</td>
+                <td>{{ companion_service_name }}</td> -->
+              </tr>
+
+              <tr class="text-center">
+                <td>{{ $t("PLACEHOLDERS.total_companion_service_price") }}</td>
+                <td>{{ total_companion_service_price }}</td>
+              </tr>
+
+              <tr class="text-center">
+                <td>{{ $t("PLACEHOLDERS.value_added_tax") }}</td>
+                <td>{{ value_added_tax }}</td>
+              </tr>
+
+              <tr class="text-center">
+                <td>{{ $t("PLACEHOLDERS.total_booking_price") }}</td>
+                <td>{{ total_booking_price }}</td>
+              </tr>
+
             </tbody>
           </table>
 
@@ -310,18 +292,18 @@ export default {
       getAppLocale: "AppLangModule/getAppLocale",
     }),
 
-    clientTypes() {
+    Types() {
       return [
         {
           id: 1,
-          name: this.$t("PLACEHOLDERS.typeClient"),
-          value: "client",
+          name: this.$t("PLACEHOLDERS.individual"),
+          value: "individual",
         },
         {
           id: 2,
-          name: this.$t("PLACEHOLDERS.typeGuest"),
-          value: "guest",
-        },
+          name: this.$t("PLACEHOLDERS.company"),
+          value: "company",
+        }
       ];
     },
 
@@ -358,11 +340,12 @@ export default {
       filterFormIsActive: false,
       filterOptions: {
         orderNumber: null,
-        orderType: null,
         clientName: null,
-        driverName: null,
-        driverPhone: null,
-        store_id: null,
+        name: null,
+        company_name: null,
+        clientPhone: null,
+        type: null,
+        provider_code: null,
         status: null,
       },
       // End:: Filter Data
@@ -371,49 +354,50 @@ export default {
       searchValue: "",
       tableHeaders: [
         {
-          text: this.$t("TABLES.Orders.orderNumber"),
-          value: "id",
-          sortable: false,
+          text: this.$t("TABLES.Rates.serialNumber"),
+          value: "serialNumber",
           align: "center",
+          sortable: false,
+        },
+        {
+          text: this.$t("PLACEHOLDERS.orderNumber"),
+          value: "id",
+          align: "center",
+          sortable: false,
         },
         {
           text: this.$t("TABLES.Orders.clientName"),
-          value: "user.name",
-          sortable: false,
-          align: "center",
-        },
-        {
-          text: this.$t("PLACEHOLDERS.clientPhone"),
-          value: "user.phone",
-          sortable: false,
-          align: "center",
-        },
-        {
-          text: this.$t("TABLES.Orders.orderType"),
-          value: "order_type.title",
-          sortable: false,
-          align: "center",
-        },
-        {
-          text: this.$t("PLACEHOLDERS.store"),
-          value: "store",
+          value: "client.name",
           sortable: false,
           align: "center",
         },
         // {
-        //   text: this.$t("TABLES.Orders.service"),
-        //   value: "service",
+        //   text: this.$t("PLACEHOLDERS.clientPhone"),
+        //   value: "user.phone",
+        //   sortable: false,
         //   align: "center",
         // },
         {
-          text: this.$t("TABLES.Orders.driverName"),
-          value: "driver.name",
+          text: this.$t("PLACEHOLDERS.name_provider"),
+          value: "provider.name",
+          sortable: false,
+          align: "center",
+        },
+        {
+          text: this.$t("PLACEHOLDERS.provider_code"),
+          value: "provider.code",
+          sortable: false,
+          align: "center",
+        },
+        {
+          text: this.$t("PLACEHOLDERS.company_name"),
+          value: "provider.company_name",
           sortable: false,
           align: "center",
         },
         {
           text: this.$t("TABLES.Orders.totalPrice"),
-          value: "total",
+          value: "total_price",
           sortable: false,
           align: "center",
         },
@@ -456,24 +440,29 @@ export default {
       // Start:: Page Permissions
       permissions: null,
       // Start:: Page Permissions
-      allStores: [],
+
       allStatus: [],
-      allStatus_popup: [],
-      allOrderTypes: [],
-      AllDrivers: [],
+      providers: [],
 
       status_modal: null,
       reason: '',
 
-      itemReport: [],
-      itemReportUserName: null,
-      itemReportClientPhone: null,
-      itemReportOrderType: null,
-      itemReportDriverName: null,
-      itemReportTotalPrice: null,
-      itemReportOrderStatus: null,
-      itemReportOrderDate: null,
-
+      serialNumber: null,
+      quick_response_code: null,
+      invoice_issue_date: null,
+      name_provider: null,
+      company_name: null,
+      tax_number: null,
+      service_provider_address: null,
+      boat_name: null,
+      number_of_individuals: null,
+      total_trip_price: null,
+      companion_service: [],
+      companion_service_name: null,
+      companion_service_price: null,
+      total_companion_service_price: null,
+      value_added_tax: null,
+      total_booking_price: null,
     };
   },
 
@@ -489,32 +478,20 @@ export default {
   methods: {
     // Start:: Handel Filter
     async submitFilterForm() {
-      // if (!this.filterOptions.startDate && this.filterOptions.endDate) {
-      //   this.$message.error(this.$t("VALIDATION.startDate"));
-      //   return;
-      // } else if (this.filterOptions.startDate && !this.filterOptions.endDate) {
-      //   this.$message.error(this.$t("VALIDATION.endDate"));
-      //   return;
-      // } else {
-      //   if (this.$route.query.page !== '1') {
-      //     await this.$router.push({ path: '/orders/all', query: { page: 1 } });
-      //   }
-      //   this.setTableRows();
-      // }
-
-
       this.setTableRows();
-
     },
+
     async resetFilter() {
 
       this.filterOptions.orderNumber = null;
-      this.filterOptions.orderType = null;
       this.filterOptions.clientName = null;
-      this.filterOptions.driverName = null;
-      this.filterOptions.driverPhone = null;
+      this.filterOptions.clientPhone = null;
+      this.filterOptions.name = null;
+      this.filterOptions.company_name = null;
+      this.filterOptions.type = null;
+      this.filterOptions.provider_code = null;
       this.filterOptions.status = null;
-      this.filterOptions.store_id = null;
+
       if (this.$route.query.page !== '1') {
         await this.$router.push({ path: '/orders/all', query: { page: 1 } });
       }
@@ -540,25 +517,31 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "admin/orders",
+          url: "orders",
 
           params: {
             page: this.paginations.current_page,
-            order_id: this.filterOptions.orderNumber,
-            order_type: this.filterOptions.orderType?.id,
-            client_name: this.filterOptions.clientName,
-            driver_name: this.filterOptions.driverName?.name,
-            owner_phone: this.filterOptions.driverPhone,
-            order_status: this.filterOptions.status?.id,
-            store_id: this.filterOptions.store_id?.id,
+
+            providerName: this.filterOptions.name?.name,
+            orderId: this.filterOptions.orderNumber,
+            userName: this.filterOptions.clientName,
+            userMobile: this.filterOptions.clientPhone,
+            orderStatus: this.filterOptions.status?.key,
+            providerCode: this.filterOptions.provider_code,
+            providerType: this.filterOptions.type?.value,
+            companyName: this.filterOptions.company_name,
+
           },
         });
         this.loading = false;
         // console.log("All Data ==>", res.data.data);
-        this.tableRows = res.data.body.orders;
-        this.paginations.last_page = res.data.body.meta.last_page;
-        this.paginations.items_per_page = res.data.body.meta.per_page;
-        this.permissions = res.data.body.permissions;
+
+        res.data.data.forEach((item, index) => {
+          item.serialNumber = (this.paginations.current_page - 1) * this.paginations.items_per_page + index + 1;
+        });
+        this.tableRows = res.data.data;
+        this.paginations.last_page = res.data.meta.last_page;
+        this.paginations.items_per_page = res.data.meta.per_page;
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
@@ -572,16 +555,6 @@ export default {
       this.$router.push({ path: `/orders/show/${item.id}` });
     },
     // ===== End:: Show
-
-    // ===== Start:: Edit
-    editItem(item) {
-      console.log(item.service_id)
-      this.$router.push({
-        path: `/orders/edit/${item.id}`,
-        query: { service_id: `${item.service_id}` }
-      });
-    },
-    // ===== End:: Edit
 
     // ===== End:: download pdf
     async DownloadInvoice(item) {
@@ -602,27 +575,27 @@ export default {
     // Start:: Handling Download Files
     async downloadPdf(item) {
 
-      if (item && item.user) {
-        if (item.user.name) {
-          this.itemReportUserName = item.user.name;
-        } else {
-          this.itemReportUserName = "-";
-        }
-        if (item.user.phone) {
-          this.itemReportClientPhone = item.user.phone;
-        } else {
-          this.itemReportClientPhone = "-";
-        }
-      }
-      this.itemReportOrderType = item.order_type.title;
-      if (item && item.driver && item.driver.name) {
-        this.itemReportDriverName = item.driver.name;
-      } else {
-        this.itemReportDriverName = '-';
-      }
-      this.itemReportTotalPrice = item.total;
-      this.itemReportOrderStatus = item.status;
-      this.itemReportOrderDate = item.created_at;
+      this.serialNumber = item.id;
+      this.quick_response_code = item.qr_code;
+      this.invoice_issue_date = item.created_at;
+      this.name_provider = item.provider.name;
+      this.company_name = item.provider.company_name;
+
+      this.tax_number = item.vehicle.license_plate;
+      this.service_provider_address = item.provider.address;
+      this.boat_name = item.vehicle.name;
+
+      this.number_of_individuals = item.vehicle.n_of_passengers;
+      this.total_trip_price = item.vehicle.total_trip_price;
+
+      this.companion_service_name = item.created_at;
+      this.companion_service_price = item.created_at;
+      this.total_companion_service_price = item.vehicle.additional_services_price;
+
+      this.value_added_tax = item.vehicle.tax_rate;
+      this.total_booking_price = item.vehicle.total_price;
+      this.companion_service = item.vehicle.additional_services_name;
+
 
       await this.$refs.html2Pdf.generatePdf();
       this.pdfDownloadBtnIsLoading = false;
@@ -630,105 +603,37 @@ export default {
     },
     // End:: Handling Download Files
 
-    // ===== Start:: Delete
-
-    selectDeleteItem(item) {
-      this.dialogDelete = true;
-      this.itemToDelete = item;
-      // console.log(item);
-    },
-
-    async confirmChangeStatus() {
-      try {
-        const requestData = {
-          status: this.status_modal.key
-        };
-
-        if (this.reason.trim() !== '') {
-          requestData.reason = this.reason.trim();
-        }
-        await this.$axios({
-          method: "PUT",
-          url: `admin/orders/${this.itemToDelete.id}`,
-          data: requestData // Put the data in the 'data' property
-        });
-
-        this.dialogDelete = false;
-        this.tableRows = this.tableRows.filter((item) => item.id !== this.itemToDelete.id);
-        this.setTableRows();
-        this.$message.success(this.$t("MESSAGES.changedSuccessfully"));
-      } catch (error) {
-        this.dialogDelete = false;
-        this.$message.error(error.response.data.errors);
-      }
-    },
-
-    // ===== End:: Delete
-
     async getAllStatus() {
       this.loading = true;
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "admin/get-status",
+          url: "orders-status",
         });
-        this.allStatus = res.data.body.status;
-        this.allStatus_popup = res.data.body.status;
-        this.allStatus.unshift({ value: null, id: null, name: `${this.$t("STATUS.all")}` });
-        console.log(res.data.body.status)
+        this.allStatus = res.data.data;
+        this.allStatus = res.data.data.OrderStatuses.map((name, index) => ({ id: index, name: name.translated_key, key: name.key }));
+        console.log(this.allStatus)
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
       }
     },
 
-    async getOrderTypes() {
+    async getProviders() {
       this.loading = true;
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "admin/stores/types/categories",
+          url: "allProviders",
         });
-        this.allOrderTypes = res.data.body.orderTypes;
-        this.allOrderTypes.unshift({ value: null, id: null, name: `${this.$t("STATUS.all")}` });
-        console.log(res.data.body.orderTypes)
+        this.loading = false;
+        this.providers = res.data.data;
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
       }
     },
 
-    async getAllDrivers() {
-      this.loading = true;
-      try {
-        let res = await this.$axios({
-          method: "GET",
-          url: "admin/driver",
-        });
-        this.AllDrivers = res.data.body.drivers;
-        // this.AllDrivers.unshift({ value: null, id: null, name: `${this.$t("STATUS.all")}` });s
-        console.log(res.data.body.drivers)
-      } catch (error) {
-        this.loading = false;
-        console.log(error.response.data.message);
-      }
-    },
-
-    async getAllStores() {
-      this.loading = true;
-      try {
-        let res = await this.$axios({
-          method: "GET",
-          url: "admin/stores",
-        });
-        this.allStores = res.data.body.stores;
-        this.allStores.unshift({ value: null, id: null, name: `${this.$t("STATUS.all")}` });
-        console.log(res.data.body.stores)
-      } catch (error) {
-        this.loading = false;
-        console.log(error.response.data.message);
-      }
-    },
 
     // ==================== End:: Crud ====================
   },
@@ -742,10 +647,8 @@ export default {
       this.paginations.current_page = +this.$route.query.page;
     }
     this.setTableRows();
-    this.getAllStores();
+    this.getProviders()
     this.getAllStatus();
-    this.getOrderTypes();
-    this.getAllDrivers();
     // End:: Fire Methods
   },
 };

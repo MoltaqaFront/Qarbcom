@@ -1,5 +1,5 @@
 <template>
-  <div class="show_all_content_wrapper" v-if="permissions">
+  <div class="show_all_content_wrapper">
     <!-- Start:: Main Section -->
     <main>
       <!--  =========== Start:: Filter Form =========== -->
@@ -13,17 +13,23 @@
         <div class="filter_form_wrapper">
           <form @submit.prevent="submitFilterForm">
             <div class="row justify-content-center align-items-center w-100">
+              <!-- Start:: Name Input -->
+              <base-input col="3" type="text" :placeholder="$t('PLACEHOLDERS.customers_most_requested')"
+                v-model.trim="filterOptions.most_requested" />
+              <!-- End:: Name Input -->
 
-              <base-select-input col="4" :optionsList="allStores" :placeholder="$t('PLACEHOLDERS.store')"
-                v-model="filterOptions.store_id" required />
+              <!-- Start:: Phone Input -->
+              <base-input col="3" type="text" :placeholder="$t('PLACEHOLDERS.customers_least_requested')"
+                v-model.trim="filterOptions.least_requested" />
+              <!-- End:: Phone Input -->
 
               <!-- Start:: Start Date Input -->
-              <base-picker-input col="4" type="date" :placeholder="$t('PLACEHOLDERS.startDate')"
+              <base-picker-input col="3" type="date" :placeholder="$t('PLACEHOLDERS.startDate')"
                 v-model.trim="filterOptions.from_date" />
               <!-- End:: Start Date Input -->
 
               <!-- Start:: End Date Input -->
-              <base-picker-input col="4" type="date" :placeholder="$t('PLACEHOLDERS.endDate')"
+              <base-picker-input col="3" type="date" :placeholder="$t('PLACEHOLDERS.endDate')"
                 v-model.trim="filterOptions.to_date" />
               <!-- End:: End Date Input -->
 
@@ -45,7 +51,7 @@
       <!--  =========== Start:: Table Title =========== -->
       <div class="table_title_wrapper">
         <div class="title_text_wrapper">
-          <h5>{{ $t("PLACEHOLDERS.order_report") }}</h5>
+          <h5>{{ $t("PLACEHOLDERS.customer_reports") }}</h5>
           <button v-if="!filterFormIsActive" class="filter_toggler"
             @click.stop="filterFormIsActive = !filterFormIsActive">
             <i class="fal fa-search"></i>
@@ -53,12 +59,12 @@
         </div>
 
         <div class="title_route_wrapper">
-          <!-- <base-button class="mt-0 pdf_btn" styleType="solid_btn" :btnText="$t('BUTTONS.downloadPdf')"
+          <base-button class="mt-0 pdf_btn" styleType="solid_btn" :btnText="$t('BUTTONS.downloadPdf')"
             @fireClick="downloadPdf" :disabled="pdfDownloadBtnIsLoading">
             <template v-slot:btn_icon>
               <i class="fal fa-file-pdf"></i>
             </template>
-          </base-button> -->
+          </base-button>
 
           <!-- <base-button
             class="mt-0 excel_btn"
@@ -83,15 +89,8 @@
         </template>
         <!-- Start:: No Data State -->
 
-        <template v-slot:[`item.id`]="{ item, index }">
-          <div class="table_image_wrapper">
-            <h6 class="text-danger" v-if="!item.id"> {{ $t("TABLES.noData") }} </h6>
-            <p v-else>{{ (paginations.current_page - 1) * paginations.items_per_page + index + 1 }}</p>
-          </div>
-        </template>
-
         <!-- Start:: Total Services In Progress -->
-        <!-- <template v-slot:[`item.bookingServicesInProcessing`]="{ item }">
+        <template v-slot:[`item.bookingServicesInProcessing`]="{ item }">
           <router-link :to="{
             path: `/main/report-details`, query: {
               driver_id: item.driver,
@@ -103,11 +102,11 @@
           }" :disabled="item.bookingServicesInProcessing == '0.00' || item.bookingServicesInProcessing == '0'">
             {{ item.bookingServicesInProcessing }} {{ $t("SYSTEM_CURRENCY") }}
           </router-link>
-        </template> -->
+        </template>
         <!-- End:: Total Services In Progress -->
 
         <!-- Start:: Total Finished Services -->
-        <!-- <template v-slot:[`item.bookingServicesEnded`]="{ item }">
+        <template v-slot:[`item.bookingServicesEnded`]="{ item }">
           <router-link :to="{
             path: `/main/report-details`,
             query: {
@@ -120,11 +119,11 @@
           }" :disabled="item.bookingServicesEnded == '0.00' || item.bookingServicesEnded == '0'">
             {{ item.bookingServicesEnded }} {{ $t("SYSTEM_CURRENCY") }}
           </router-link>
-        </template> -->
+        </template>
         <!-- End:: Total Finished Services -->
 
         <!-- Start:: Total Products In Progress -->
-        <!-- <template v-slot:[`item.bookingProductsInProcessing`]="{ item }">
+        <template v-slot:[`item.bookingProductsInProcessing`]="{ item }">
           <router-link :to="{
             path: `/main/report-details`,
             query: {
@@ -137,11 +136,11 @@
           }" :disabled="item.bookingProductsInProcessing == '0.00' || item.bookingProductsInProcessing == '0'">
             {{ item.bookingProductsInProcessing }} {{ $t("SYSTEM_CURRENCY") }}
           </router-link>
-        </template> -->
+        </template>
         <!-- End:: Total Products In Progress -->
 
         <!-- Start:: Total Finished Products -->
-        <!-- <template v-slot:[`item.bookingProductsEnded`]="{ item }">
+        <template v-slot:[`item.bookingProductsEnded`]="{ item }">
           <router-link :to="{
             path: `/main/report-details`,
             query: {
@@ -154,7 +153,7 @@
           }" :disabled="item.bookingProductsEnded == '0.00' || item.bookingProductsEnded == '0'">
             {{ item.bookingProductsEnded }} {{ $t("SYSTEM_CURRENCY") }}
           </router-link>
-        </template> -->
+        </template>
         <!-- End:: Total Finished Products -->
       </v-data-table>
       <!--  =========== End:: Data Table =========== -->
@@ -173,13 +172,13 @@
     <!-- End:: Pagination -->
 
     <!-- Start:: Generate PDF Template Content -->
-    <!-- <vue-html2pdf :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="true"
-      :filename="$t('TITLES.financialReports')" :pdf-quality="2" pdf-format="a4" :manual-pagination="false"
+    <vue-html2pdf :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="true"
+      :filename="$t('PLACEHOLDERS.customer_reports')" :pdf-quality="2" pdf-format="a4" :manual-pagination="false"
       :paginate-elements-by-height="1400" pdf-content-width="100%" @progress="bdfDownloadBtnIsLoading = true"
       @hasGenerated="$message.success($t('MESSAGES.generatedSuccessfully'))" ref="html2Pdf">
       <section slot="pdf-content">
         <div class="pdf_file_content">
-          <h1 class="file_title"> {{ $t('TITLES.financialReports') }} </h1>
+          <h1 class="file_title"> {{ $t('PLACEHOLDERS.customer_reports') }} </h1>
 
           <v-simple-table>
             <template v-slot:default>
@@ -193,32 +192,29 @@
               <tbody>
                 <tr v-for="row in tableRows" :key="row.id">
                   <td>{{ row.id }}</td>
-                  <td>{{ row.driver_name }}</td>
-                  <td>{{ row.phone_number }}</td>
-                  <td>{{ row.bookingServicesInProcessing }} {{ $t("SYSTEM_CURRENCY") }}</td>
-                  <td>{{ row.bookingServicesEnded }} {{ $t("SYSTEM_CURRENCY") }}</td>
-                  <td>{{ row.bookingProductsInProcessing }} {{ $t("SYSTEM_CURRENCY") }}</td>
-                  <td>{{ row.bookingProductsEnded }} {{ $t("SYSTEM_CURRENCY") }}</td>
+                  <td>{{ row.name }}</td>
+                  <td>{{ row.mobile }}</td>
+                  <td>{{ row.number_of_orders }}</td>
                 </tr>
               </tbody>
             </template>
           </v-simple-table>
         </div>
       </section>
-    </vue-html2pdf> -->
+    </vue-html2pdf>
     <!-- End:: Generate PDF Template Content -->
   </div>
 </template>
 
 <script>
-// import VueHtml2pdf from 'vue-html2pdf';
+import VueHtml2pdf from 'vue-html2pdf';
 import { mapGetters } from "vuex";
 
 export default {
   name: "AllFinancialReports",
 
   components: {
-    // VueHtml2pdf
+    VueHtml2pdf
   },
 
   computed: {
@@ -239,11 +235,11 @@ export default {
       // Start:: Filter Data
       filterFormIsActive: false,
       filterOptions: {
-        store_id: null,
+        most_requested: null,
+        least_requested: null,
         from_date: null,
         to_date: null
       },
-      allStores: [],
       // End:: Filter Data
 
       // Start:: Table Data
@@ -254,32 +250,23 @@ export default {
           value: "id",
           align: "center",
           width: "80",
-          sortable: false,
+          sortable: true,
         },
         {
-          text: this.$t("PLACEHOLDERS.store"),
-          value: "store.name",
-          sortable: false,
+          text: this.$t("PLACEHOLDERS.client_name"),
+          value: "name",
           align: "center",
         },
         {
-          text: this.$t("TABLES.FinancialReports.totalProductsInProcessing"),
-          value: "order_not_finished_count",
-          sortable: false,
+          text: this.$t("PLACEHOLDERS.mobileNumber"),
+          value: "mobile",
           align: "center",
         },
         {
-          text: this.$t("TABLES.FinancialReports.totalProductsEnded"),
-          value: "order_finished_count",
-          sortable: false,
+          text: this.$t("PLACEHOLDERS.number_of_requests"),
+          value: "number_of_orders",
           align: "center",
-        },
-        {
-          text: this.$t("TABLES.Orders.totalPrice"),
-          value: "total_price",
-          sortable: false,
-          align: "center",
-        },
+        }
       ],
       tableRows: [],
       // End:: Table Data
@@ -311,16 +298,17 @@ export default {
     // Start:: Handel Filter
     async submitFilterForm() {
       if (this.$route.query.page !== '1') {
-        await this.$router.push({ path: '/financial-reports/all', query: { page: 1 } });
+        await this.$router.push({ path: '/customer-reports/all', query: { page: 1 } });
       }
       this.setTableRows();
     },
     async resetFilter() {
-      this.filterOptions.store_id = null;
+      this.filterOptions.most_requested = null;
+      this.filterOptions.least_requested = null;
       this.filterOptions.from_date = null;
       this.filterOptions.to_date = null;
       if (this.$route.query.page !== '1') {
-        await this.$router.push({ path: '/financial-reports/all', query: { page: 1 } });
+        await this.$router.push({ path: '/customer-reports/all', query: { page: 1 } });
       }
       this.setTableRows();
     },
@@ -344,20 +332,21 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "admin/orders-report",
+          url: "client-reports",
           params: {
             page: this.paginations.current_page,
-            store_id: this.filterOptions.store_id?.id,
-            from: this.filterOptions.from_date,
-            to: this.filterOptions.to_date,
+            driver_name: this.filterOptions.most_requested,
+            phone_number: this.filterOptions.least_requested,
+            from_date: this.filterOptions.from_date,
+            to_date: this.filterOptions.to_date,
           },
         });
         this.loading = false;
         // console.log("All Data ==>", res.data.data);
-        this.tableRows = res.data.body.reports;
-        this.paginations.last_page = res.data.body.meta.last_page;
-        this.paginations.items_per_page = res.data.body.meta.per_page;
-        this.permissions = res.data.body.permissions;
+        this.tableRows = res.data.data;
+        this.paginations.last_page = res.data.meta.last_page;
+        this.paginations.items_per_page = res.data.meta.per_page;
+
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
@@ -375,26 +364,9 @@ export default {
     // ==================== Start:: Crud ====================
     // ===== Start:: Show
     showItem(item) {
-      this.$router.push({ path: `/financial-reports/show/${item.id}` });
+      this.$router.push({ path: `/customer-reports/show/${item.id}` });
     },
     // ===== End:: Show
-
-    async getAllStores() {
-      this.loading = true;
-      try {
-        let res = await this.$axios({
-          method: "GET",
-          url: "admin/stores",
-        });
-        this.allStores = res.data.body.stores;
-        this.allStores.unshift({ name: this.$t('STATUS.all'), id: null, value: null });
-        console.log(res.data.body.stores)
-      } catch (error) {
-        this.loading = false;
-        console.log(error.response.data.message);
-      }
-    },
-
     // ==================== End:: Crud ====================
   },
 
@@ -407,7 +379,6 @@ export default {
       this.paginations.current_page = +this.$route.query.page;
     }
     this.setTableRows();
-    this.getAllStores()
     // End:: Fire Methods
   },
 };

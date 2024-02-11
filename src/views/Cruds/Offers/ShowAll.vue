@@ -1,5 +1,5 @@
 <template>
-  <div class="show_all_content_wrapper" v-if="permissions">
+  <div class="show_all_content_wrapper">
     <!-- Start:: Main Section -->
     <main>
       <!--  =========== Start:: Filter Form =========== -->
@@ -14,17 +14,20 @@
           <form @submit.prevent="submitFilterForm">
             <div class="row justify-content-center align-items-center w-100">
 
-              <base-input col="3" type="text" :placeholder="$t('BUTTONS.offer')" v-model="filterOptions.offer_name"
-                required />
+              <base-input col="4" type="text" :placeholder="$t('PLACEHOLDERS.offer_name')"
+                v-model="filterOptions.offer_name" required />
 
-              <base-select-input col="3" :optionsList="allOrders" :placeholder="$t('PLACEHOLDERS.orderType')"
-                v-model="filterOptions.orderType" required />
+              <base-select-input col="4" :optionsList="vehicle_types" :placeholder="$t('PLACEHOLDERS.type_vechile')"
+                v-model="filterOptions.vehicle_type" required />
 
-              <base-select-input col="3" :optionsList="allStores" :placeholder="$t('PLACEHOLDERS.storeType')"
-                v-model="filterOptions.storeType" required />
+              <base-select-input col="4" :optionsList="Vehicles" :placeholder="$t('PLACEHOLDERS.Vehicle')"
+                v-model="filterOptions.vehicle" required />
+
+              <base-select-input col="4" :optionsList="providers" :placeholder="$t('PLACEHOLDERS.name_provider')"
+                v-model="filterOptions.provider_name" required />
 
               <!-- Start:: Status Input -->
-              <base-select-input col="3" :optionsList="activeStatuses" :placeholder="$t('PLACEHOLDERS.status')"
+              <base-select-input col="4" :optionsList="activeStatuses" :placeholder="$t('PLACEHOLDERS.status')"
                 v-model="filterOptions.status" />
               <!-- End:: Status Input -->
             </div>
@@ -52,11 +55,6 @@
             <i class="fal fa-search"></i>
           </button>
         </div>
-        <div class="title_route_wrapper" v-if="permissions.create">
-          <router-link to="/offers/create">
-            {{ $t("BUTTONS.addOffer") }}
-          </router-link>
-        </div>
       </div>
       <!--  =========== End:: Table Title =========== -->
 
@@ -68,120 +66,21 @@
         <template v-slot:no-data>
           {{ $t("TABLES.noData") }}
         </template>
-        <!-- Start:: No Data State -->
 
-        <!-- Start:: Product -->
-        <template v-slot:[`item.product`]="{ item }">
-          <p v-if="!item.product || item.product.length === 0">-</p>
-          <template v-else>
-            <div v-for="productItem in item.product" :key="productItem.id">
-              <p>{{ productItem.store ? productItem.store.name : '-' }}</p>
-            </div>
-          </template>
+        <template v-slot:[`item.serialNumber`]="{ item }">
+          <p class="blue-grey--text text--darken-1 fs-3" v-if="!item.serialNumber">-</p>
+          <p v-else>{{ item.serialNumber }}</p>
         </template>
-        <!-- End:: Product -->
 
-        <!-- Start:: Service -->
-        <template v-slot:[`item.id`]="{ item, index }">
-          <p class="blue-grey--text text--darken-1 fs-3" v-if="!item.id">-</p>
-          <p v-else>{{ (paginations.current_page - 1) * paginations.items_per_page + index + 1 }}</p>
-        </template>
-        <template v-slot:[`item.service`]="{ item }">
-          <p class="blue-grey--text text--darken-1 fs-3" v-if="!item.service">-</p>
-          <p v-else>{{ item.service.name }}</p>
-        </template>
-        <!-- End:: Service -->
-
-        <!-- Start:: Price Before Discount -->
-        <template v-slot:[`item.price_before_discount`]="{ item }">
-          <p class="text-danger fs-3" v-if="!item.price_before_discount">-</p>
-          <p class="text-danger fs-6" v-else>{{ item.price_before_discount }}</p>
-        </template>
-        <!-- End:: Price Before Discount -->
-
-        <!-- Start:: Price After Discount -->
-        <template v-slot:[`item.price_after_discount`]="{ item }">
-          <p class="text-success fs-3" v-if="!item.price_after_discount">-</p>
-          <p class="text-success fs-6" v-else>{{ item.price_after_discount }}</p>
-        </template>
-        <!-- End:: Price After Discount -->
-
-        <!-- Start:: Activation -->
         <template v-slot:[`item.is_active`]="{ item }">
-          <div class="activation" dir="ltr" style="z-index: 1" v-if="permissions.activate">
-            <v-switch class="mt-2" color="success" v-model="item.is_active" hide-details
-              @change="changeActivationStatus(item)"></v-switch>
-          </div>
-
-          <template v-else>
-            <span class="text-success text-h5" v-if="item.is_active">
-              <i class="far fa-check"></i>
-            </span>
-            <span class="text-danger text-h5" v-else>
-              <i class="far fa-times"></i>
-            </span>
-          </template>
+          <v-chip v-if="item.is_active" color="light-blue darken-2" text-color="white">
+            {{ $t("STATUS.active") }}
+          </v-chip>
+          <v-chip v-else color="deep-purple darken-1" text-color="white">
+            {{ $t("STATUS.notActive") }}
+          </v-chip>
         </template>
-        <!-- End:: Activation -->
-
-        <!-- Start:: Actions -->
-        <template v-slot:[`item.actions`]="{ item }">
-          <div class="actions">
-
-            <a-tooltip placement="bottom" v-if="permissions.show">
-              <template slot="title">
-                <span>{{ $t("BUTTONS.show") }}</span>
-              </template>
-              <button class="btn_show" @click="showItem(item)">
-                <i class="fal fa-eye"></i>
-              </button>
-            </a-tooltip>
-            <a-tooltip placement="bottom" v-if="permissions.edit && item.can_edit">
-              <template slot="title">
-                <span>{{ $t("BUTTONS.edit") }}</span>
-              </template>
-              <button class="btn_edit" @click="editItem(item)">
-                <i class="fal fa-edit"></i>
-              </button>
-            </a-tooltip>
-
-            <a-tooltip placement="bottom" v-if="permissions.delete && item.can_delete">
-              <template slot="title">
-                <span>{{ $t("BUTTONS.delete") }}</span>
-              </template>
-              <button class="btn_delete" @click="selectDeleteItem(item)">
-                <i class="fal fa-trash-alt"></i>
-              </button>
-            </a-tooltip>
-
-            <template v-if="!permissions.edit && !permissions.delete">
-              <i class="fal fa-lock-alt fs-5 blue-grey--text text--darken-1"></i>
-            </template>
-          </div>
-        </template>
-        <!-- End:: Actions -->
-
-        <!-- ======================== Start:: Dialogs ======================== -->
-        <template v-slot:top>
-          <!-- Start:: Delete Modal -->
-          <v-dialog v-model="dialogDelete">
-            <v-card>
-              <v-card-title class="text-h5 justify-center" v-if="itemToDelete">
-                {{ $t("TITLES.DeleteConfirmingMessage", { name: itemToDelete.id }) }}
-              </v-card-title>
-              <v-card-actions>
-                <v-btn class="modal_confirm_btn" @click="confirmDeleteItem">{{
-                  $t("BUTTONS.ok")
-                }}</v-btn>
-
-                <v-btn class="modal_cancel_btn" @click="dialogDelete = false">{{ $t("BUTTONS.cancel") }}</v-btn>
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <!-- End:: Delete Modal -->
-        </template>
-        <!-- ======================== End:: Dialogs ======================== -->
+        <!-- Start:: No Data State -->
       </v-data-table>
       <!--  =========== End:: Data Table =========== -->
     </main>
@@ -209,8 +108,6 @@ export default {
   computed: {
     ...mapGetters({
       getAppLocale: "AppLangModule/getAppLocale",
-      allProducts: "ApiGetsModule/allProductsData",
-      allServices: "ApiGetsModule/allServicesData",
     }),
 
     activeStatuses() {
@@ -233,20 +130,6 @@ export default {
 
       ];
     },
-    offerTypes() {
-      return [
-        {
-          id: 1,
-          name: this.$t("PLACEHOLDERS.product"),
-          value: "product",
-        },
-        {
-          id: 2,
-          name: this.$t("PLACEHOLDERS.service"),
-          value: "service",
-        },
-      ];
-    },
   },
 
   data() {
@@ -260,13 +143,15 @@ export default {
       filterFormIsActive: false,
       filterOptions: {
         offer_name: null,
-        orderType: null,
-        storeType: null,
+        vehicle: null,
+        vehicle_type: null,
+        provider_name: null,
         status: null,
       },
 
-      allStores: [],
-      allOrders: [],
+      vehicle_types: [],
+      Vehicles: [],
+      providers: [],
       // End:: Filter Data
 
       // Start:: Table Data
@@ -274,44 +159,44 @@ export default {
       tableHeaders: [
         {
           text: this.$t("TABLES.Offers.serialNumber"),
-          value: "id",
+          value: "serialNumber",
           align: "center",
           width: "80",
           sortable: false,
         },
         {
-          text: this.$t("BUTTONS.offer"),
+          text: this.$t("PLACEHOLDERS.offer_name"),
           value: "name",
           align: "center",
           sortable: false,
         },
         {
-          text: this.$t("PLACEHOLDERS.offer_type"),
-          value: "type.name",
+          text: this.$t("PLACEHOLDERS.vechile_name"),
+          value: "vehicle.name",
           align: "center",
           sortable: false,
         },
         {
-          text: this.$t("PLACEHOLDERS.offer_percentage"),
-          value: "discount",
+          text: this.$t("PLACEHOLDERS.discount_percentage"),
+          value: "offer_value",
           align: "center",
           sortable: false,
         },
         {
           text: this.$t("TABLES.Offers.startDate"),
-          value: "start_at",
+          value: "offer_date_from",
           align: "center",
           sortable: false,
         },
         {
           text: this.$t("TABLES.Offers.endDate"),
-          value: "end_at",
+          value: "offer_date_to",
           align: "center",
           sortable: false,
         },
         {
-          text: this.$t("PLACEHOLDERS.store"),
-          value: "store.title",
+          text: this.$t("PLACEHOLDERS.name_provider"),
+          value: "provider.name",
           align: "center",
           sortable: false,
         },
@@ -322,17 +207,11 @@ export default {
           sortable: false,
         },
         {
-          text: this.$t("TABLES.Offers.activation"),
+          text: this.$t("PLACEHOLDERS.status"),
           value: "is_active",
           align: "center",
           width: "120",
           sortable: false,
-        },
-        {
-          text: this.$t("TABLES.Offers.actions"),
-          value: "actions",
-          sortable: false,
-          align: "center",
         },
       ],
 
@@ -369,12 +248,6 @@ export default {
   },
 
   methods: {
-    // Start:: Vuex Actions
-    ...mapActions({
-      getProducts: "ApiGetsModule/getProducts",
-      getServices: "ApiGetsModule/getServices",
-    }),
-    // End:: Vuex Actions
 
     // Start:: Handel Filter
     async submitFilterForm() {
@@ -385,8 +258,9 @@ export default {
     },
     async resetFilter() {
       this.filterOptions.offer_name = null;
-      this.filterOptions.orderType = null;
-      this.filterOptions.storeType = null;
+      this.filterOptions.vehicle = null;
+      this.filterOptions.vehicle_type = null;
+      this.filterOptions.provider_name = null;
       this.filterOptions.status = null;
       if (this.$route.query.page !== '1') {
         await this.$router.push({ path: '/offers/all', query: { page: 1 } });
@@ -413,21 +287,25 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "admin/offers",
+          url: "offers",
           params: {
             page: this.paginations.current_page,
-            offer_name: this.filterOptions.offer_name,
-            type: this.filterOptions.orderType?.id,
-            store_id: this.filterOptions.storeType?.id,
-            is_active: this.filterOptions.status?.value,
+            name: this.filterOptions.offer_name,
+            vehicle_id: this.filterOptions.vehicle?.id,
+            vehicle_type_id: this.filterOptions.vehicle_type?.id,
+            provider_id: this.filterOptions.provider_name?.id,
+            status: this.filterOptions.status?.value,
           },
         });
         this.loading = false;
         // console.log("All Data ==>", res.data.data);
-        this.tableRows = res.data.body.offers;
-        this.paginations.last_page = res.data.body.meta.last_page;
-        this.paginations.items_per_page = res.data.body.meta.per_page;
-        this.permissions = res.data.body.permissions;
+        res.data.data.forEach((item, index) => {
+          item.serialNumber = (this.paginations.current_page - 1) * this.paginations.items_per_page + index + 1;
+        });
+        this.tableRows = res.data.data;
+        this.paginations.last_page = res.data.meta.last_page;
+        this.paginations.items_per_page = res.data.meta.per_page;
+
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
@@ -436,82 +314,55 @@ export default {
     // End:: Set Table Rows
 
     // ==================== Start:: Crud ====================
-    // ===== Start:: Edit
-    editItem(item) {
-      this.$router.push({ path: `/offers/edit/${item.id}` });
-    },
-    showItem(item) {
-      this.$router.push({ path: `/offers/show/${item.id}` });
-    },
-    // ===== End:: Edit
 
-    // ===== Start:: Delete
-    selectDeleteItem(item) {
-      this.dialogDelete = true;
-      this.itemToDelete = item;
-    },
+    // all vehicle types
 
-    async confirmDeleteItem() {
-      try {
-        await this.$axios({
-          method: "DELETE",
-          url: `admin/offers/${this.itemToDelete.id}`,
-        });
-        this.dialogDelete = false;
-        this.tableRows = this.tableRows.filter((item) => {
-          return item.id != this.itemToDelete.id;
-        });
-        this.setTableRows();
-        this.$message.success(this.$t("MESSAGES.deletedSuccessfully"));
-      } catch (error) {
-        this.dialogDelete = false;
-        this.$message.error(error.response.data.message);
-      }
-    },
-    // ===== End:: Delete
-    // ==================== End:: Crud ====================
-
-    // Start:: Change Activation Status
-
-    async changeActivationStatus(item) {
-      try {
-        await this.$axios({
-          method: "PUT",
-          url: `admin/offers/${item.id}/activate`,
-        });
-        this.$message.success(this.$t("MESSAGES.changeActivation"));
-      } catch (error) {
-        this.$message.error(error.response.data.message);
-      }
-    },
-
-    // End:: Change Activation Status
-
-    async getAllStores() {
+    async vehicleTypes() {
       this.loading = true;
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "admin/stores",
+          url: "vehicleTypes",
         });
-        this.allStores = res.data.body.stores;
-        this.allStores.unshift({ name: this.$t("STATUS.all"), id: null, value: null });
+        this.vehicle_types = res.data.data;
+        // this.vehicle_types.unshift({ name: this.$t("STATUS.all"), id: null, value: null });
         console.log(res.data.body.stores)
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
       }
     },
-    async getAllOrders() {
+
+    // all providers
+
+    async AllProviders() {
       this.loading = true;
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "admin/stores/types/categories",
+          url: "allProviders",
         });
-        this.allOrders = res.data.body.orderTypes;
-        this.allOrders.unshift({ name: this.$t("STATUS.all"), id: null, value: null });
-        console.log(res.data.body.orderTypes)
+        this.providers = res.data.data;
+        // this.providers.unshift({ name: this.$t("STATUS.all"), id: null, value: null });
+        console.log(res.data.body.stores)
+      } catch (error) {
+        this.loading = false;
+        console.log(error.response.data.message);
+      }
+    },
+
+    // all vehicles
+
+    async getAllVehicles() {
+      this.loading = true;
+      try {
+        let res = await this.$axios({
+          method: "GET",
+          url: "vehicles",
+        });
+        this.Vehicles = res.data.data;
+        // this.Vehicles.unshift({ name: this.$t("STATUS.all"), id: null, value: null });
+        console.log(res.data.body.stores)
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
@@ -527,11 +378,10 @@ export default {
     if (this.$route.query.page) {
       this.paginations.current_page = +this.$route.query.page;
     }
-    this.getProducts();
-    this.getServices();
     this.setTableRows();
-    this.getAllStores();
-    this.getAllOrders()
+    this.vehicleTypes();
+    this.AllProviders();
+    this.getAllVehicles();
     // End:: Fire Methods
   },
 };

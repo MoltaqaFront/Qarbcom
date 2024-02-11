@@ -22,7 +22,8 @@
               <!-- End:: Phone Input -->
 
               <!-- Start:: email Input -->
-              <base-input col="3" type="tel" :placeholder="$t('PLACEHOLDERS.email')" v-model.trim="filterOptions.email" />
+              <base-input col="3" type="email" :placeholder="$t('PLACEHOLDERS.email')"
+                v-model.trim="filterOptions.email" />
               <!-- End:: email Input -->
 
               <!-- Start:: Status Input -->
@@ -52,13 +53,7 @@
                   <i class="fal fa-redo"></i>
                 </span>
               </a-tooltip>
-              <!-- <button class="submit_btn" :disabled="isWaitingRequest">
-                <i class="fal fa-search"></i>
-              </button> -->
 
-              <!-- <button class="reset_btn" type="button" :disabled="isWaitingRequest" @click="resetFilter">
-                <i class="fal fa-redo"></i>
-              </button> -->
             </div>
           </form>
         </div>
@@ -88,8 +83,10 @@
         <!-- Start:: No Data State -->
 
         <template v-slot:[`item.id`]="{ item, index }">
-          <h6 class="text-danger" v-if="!item.id"> {{ $t("TABLES.noData") }} </h6>
-          <h6 v-else> {{ index + 1 }} </h6>
+          <div class="table_image_wrapper">
+            <h6 class="text-danger" v-if="!item.id"> {{ $t("TABLES.noData") }} </h6>
+            <p v-else>{{ (paginations.current_page - 1) * paginations.items_per_page + index + 1 }}</p>
+          </div>
         </template>
 
         <!-- Start:: Name -->
@@ -99,23 +96,45 @@
         </template>
         <!-- End:: Name -->
 
-        <!-- Start:: Activation -->
-        <!-- Start:: Activation Status -->
-        <template v-slot:[`item.is_active`]="{ item }">
-          <span class="text-success text-h5" v-if="item.is_active">
-            <i class="far fa-check"></i>
-          </span>
-          <span class="text-danger text-h5" v-else>
-            <i class="far fa-times"></i>
-          </span>
+        <!-- Start:: email -->
+        <template v-slot:[`item.email`]="{ item }">
+          <h6 class="text-danger" v-if="!item.email"> - </h6>
+          <h6 v-else> {{ item.email }} </h6>
         </template>
-        <!-- End:: Activation Status -->
+        <!-- End:: email -->
+
+        <template v-slot:[`item.is_verified`]="{ item }">
+          <v-chip :color="item.is_verified ? 'green' : 'red'" text-color="white" small>
+            <template v-if="item.is_verified">
+              {{ $t("STATUS.active") }}
+            </template>
+            <template v-else>
+              {{ $t("STATUS.notActive") }}
+            </template>
+          </v-chip>
+        </template>
+
+        <!-- Start:: Activation -->
+        <template v-slot:[`item.is_active`]="{ item }">
+          <div class="activation" dir="ltr" style="z-index: 1" v-if="$can('clients activate', 'clients')">
+            <v-switch class="mt-2" color="success" v-model="item.is_active" hide-details
+              @change="changeActivationStatus(item)"></v-switch>
+          </div>
+
+          <template v-else>
+            <span class="text-success text-h5" v-if="item.is_active">
+              <i class="far fa-check"></i>
+            </span>
+            <span class="text-danger text-h5" v-else>
+              <i class="far fa-times"></i>
+            </span>
+          </template>
+        </template>
         <!-- End:: Activation -->
 
         <!-- Start:: Actions -->
         <template v-slot:[`item.actions`]="{ item }">
           <div class="actions">
-
             <a-tooltip placement="bottom" v-if="$can('clients show', 'clients')">
               <template slot="title">
                 <span>{{ $t("BUTTONS.show") }}</span>
@@ -124,6 +143,20 @@
                 <i class="fal fa-eye"></i>
               </button>
             </a-tooltip>
+
+            <a-tooltip placement="bottom">
+              <template slot="title">
+                <span>{{ $t("PLACEHOLDERS.current_balance") }}</span>
+              </template>
+
+              <button class="btn_edit" @click="selectAcceptItem(item)">
+                <i class="fal fa-wallet"></i>
+              </button>
+            </a-tooltip>
+
+            <!-- <template v-else>
+              <i class="fal fa-lock-alt fs-5 blue-grey--text text--darken-1"></i>
+            </template> -->
 
             <template v-if="$can('clients active', 'clients')">
               <a-tooltip placement="bottom" v-if="!item.is_active">
@@ -134,7 +167,7 @@
                   <i class="fad fa-check-circle"></i>
                 </button>
               </a-tooltip>
-              <a-tooltip placement="bottom" v-if="item.is_active">
+              <a-tooltip placement="bottom" v-else>
                 <template slot="title">
                   <span>{{ $t("BUTTONS.deactivate") }}</span>
                 </template>
@@ -144,9 +177,6 @@
               </a-tooltip>
             </template>
 
-            <template v-else>
-              <i class="fal fa-lock-alt fs-5 blue-grey--text text--darken-1"></i>
-            </template>
           </div>
         </template>
         <!-- End:: Actions -->
@@ -178,9 +208,34 @@
           </v-dialog>
           <!-- End:: Deactivate Modal -->
 
+          <!-- Start:: Balance Modal -->
+          <v-dialog v-model="dialogBalance">
+            <v-card>
+              <v-card-title class="text-h5 justify-center" v-if="itemToBalance">
+                <span>{{ $t('PLACEHOLDERS.current_balance') }} : </span>
+                <span>{{ itemToBalance.user_balance }}</span>
+              </v-card-title>
+
+              <form class="w-100">
+
+                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.current_balance')"
+                  v-model.trim="balance_package" required />
+              </form>
+
+              <v-card-actions>
+                <v-btn class="modal_confirm_btn" @click="confirmAcceptItem">{{
+                  $t("BUTTONS.ok")
+                }}</v-btn>
+
+                <v-btn class="modal_cancel_btn" @click="dialogBalance = false">{{ $t("BUTTONS.cancel") }}</v-btn>
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- End:: Balance Modal -->
+
         </template>
         <!-- ======================== End:: Dialogs ======================== -->
-
 
       </v-data-table>
       <!--  =========== End:: Data Table =========== -->
@@ -272,7 +327,7 @@ export default {
           sortable: false,
         },
         {
-          text: this.$t("PLACEHOLDERS.email"),
+          text: this.$t("TABLES.Clients.email"),
           value: "email",
           align: "center",
           sortable: false,
@@ -283,6 +338,12 @@ export default {
           align: "center",
           sortable: false,
         },
+        // {
+        //   text: this.$t("PLACEHOLDERS.registration_otp_status"),
+        //   value: "is_verified",
+        //   align: "center",
+        //   sortable: false,
+        // },
         {
           text: this.$t("TABLES.Clients.active"),
           value: "is_active",
@@ -311,6 +372,9 @@ export default {
       dialogDeactivate: false,
       itemToChangeActivationStatus: null,
       deactivateReason: null,
+
+      dialogBalance: false,
+      itemToBalance: null,
 
     };
   },
@@ -381,13 +445,35 @@ export default {
         // console.log("All Data ==>", res.data.data);
         this.tableRows = res.data.data;
         this.paginations.last_page = res.data.meta.last_page;
-        this.paginations.items_per_page = res.data.meta.per_page;
+        this.paginations.items_per_page = res.data.meta.per_page;;
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
       }
     },
     // End:: Set Table Rows
+
+    // Start:: Change Activation Status
+    async changeActivationStatus(item) {
+      try {
+        await this.$axios({
+          method: "POST",
+          url: `clients/activate/${item.id}`,
+        });
+        this.setTableRows();
+        this.$message.success(this.$t("MESSAGES.changeActivation"));
+      } catch (error) {
+        this.$message.error(error.response.data.message);
+      }
+    },
+    // End:: Change Activation Status
+
+    // ==================== Start:: Crud ====================
+    // ===== Start:: Show
+    showItem(item) {
+      this.$router.push({ path: `/clients/show/${item.id}` });
+    },
+    // ===== End:: Show
 
     // ===== Start:: Handling Activation & Deactivation
     selectDeactivateItem(item) {
@@ -401,16 +487,14 @@ export default {
       // Start:: Append Request Data
       REQUEST_DATA.message = this.deactivateReason;
       // Start:: Append Request Data
-
       try {
         await this.$axios({
           method: "POST",
           url: `clients/active/${targetItem.id}`,
-          data: targetItem.is_active ? REQUEST_DATA : null,
+          data: REQUEST_DATA,
         });
         this.$message.success(this.$t("MESSAGES.changeActivation"));
-        let filteredElemet = this.tableRows.find(element => element.id === targetItem.id);
-        filteredElemet.is_active = !filteredElemet.is_active;
+        this.setTableRows();
         this.itemToChangeActivationStatus = null;
         this.deactivateReason = null;
       } catch (error) {
@@ -419,12 +503,31 @@ export default {
     },
     // ===== End:: Handling Activation & Deactivation
 
-    // ==================== Start:: Crud ====================
-    // ===== Start:: Show
-    showItem(item) {
-      this.$router.push({ path: `/clients/show/${item.id}` });
+    selectAcceptItem(item) {
+      this.dialogBalance = true;
+      this.itemToBalance = item;
     },
-    // ===== End:: Show
+    async confirmAcceptItem(item) {
+
+      const REQUEST_DATA = new FormData();
+      REQUEST_DATA.append("balance", this.balance_package);
+      // REQUEST_DATA.append("_method", "PUT");
+
+      try {
+        await this.$axios({
+          method: "POST",
+          url: `change-client-balance/${this.itemToBalance.id}`,
+          data: REQUEST_DATA,
+        });
+        this.dialogBalance = false;
+        this.balance_package = null,
+          this.setTableRows();
+        this.$message.success(this.$t("MESSAGES.verifiedSuccessfully"));
+      } catch (error) {
+        this.dialogBalance = false;
+        this.$message.error(error.response.data.message);
+      }
+    },
     // ==================== End:: Crud ====================
   },
 

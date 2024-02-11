@@ -63,11 +63,11 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: `cities/${this.$route.params.id}`,
+          url: `countries/${this.$route.params.id}`,
         });
-        this.data.nameAr = res.data.data.city.name_ar;
-        this.data.nameEn = res.data.data.city.name_en;
-        this.data.active = res.data.data.city.is_active;
+        this.data.nameAr = res.data.data.country.name_ar;
+        this.data.nameEn = res.data.data.country.name_en;
+        this.data.active = res.data.data.country.is_active;
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);

@@ -23,11 +23,13 @@
           <!-- Start:: Name Input -->
           <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.nameEn')" v-model.trim="data.nameEn" required />
 
-          <base-input col="6" type="date" :placeholder="$t('PLACEHOLDERS.start_date')"
+
+          <base-picker-input col="6" type="date" :disabledDate="disabledDate" :placeholder="$t('PLACEHOLDERS.start_date')"
             v-model.trim="data.publish_start_date" required />
 
-          <base-input col="6" type="date" :placeholder="$t('PLACEHOLDERS.end_date')" v-model.trim="data.publish_end_date"
-            required />
+          <base-picker-input col="6" type="date" :disabledDate="disabledDate" :placeholder="$t('PLACEHOLDERS.end_date')"
+            v-model.trim="data.publish_end_date" required />
+
           <!-- End:: Name Input -->
 
           <!-- Start:: Deactivate Switch Input -->
@@ -51,6 +53,8 @@
 </template>
 
 <script>
+
+import moment from "moment";
 
 export default {
   name: "EditAds",
@@ -81,6 +85,9 @@ export default {
   },
 
   methods: {
+    disabledDate(current) {
+      return current && current <= moment().startOf("day");
+    },
 
     selectImage(selectedImage) {
       this.data.image = selectedImage;

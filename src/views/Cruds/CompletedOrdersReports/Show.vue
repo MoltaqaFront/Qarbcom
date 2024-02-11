@@ -126,13 +126,13 @@
               <!-- End:: Products Total Price Input -->
 
               <!-- Start:: Products -->
-              <!-- <div class="col-12">
+              <div class="col-12">
                 <div class="row" v-if="data.orderProducts || data.orderProducts.length > 0">
                   <div class="col-6 col-md-4" v-for="product in data.orderProducts" :key="product.id">
-                    <ProductCard :productData="product" />
+                    <!-- <ProductCard :productData="product" /> -->
                   </div>
                 </div>
-              </div> -->
+              </div>
               <!-- End:: Products -->
             </div>
           </div>
@@ -281,20 +281,14 @@
           <!-- ********** End:: Driver Data ********** -->
 
           <!-- ********** Start:: Driver Rate Data ********** -->
-          <!-- <div class="rate_wrapper" v-if="data.orderStatus === 'done'">
+          <div class="rate_wrapper" v-if="data.orderStatus === 'done'">
             <h4 class="group_title mt-6 mb-3">
               {{ $t("TITLES.driverRating") }}
             </h4>
             <RatingPreview v-if="data.driverRate" :rate="data.driverRate" />
-            <base-input
-              v-if="data.rateComment"
-              rows="5"
-              type="textarea"
-              :placeholder="$t('PLACEHOLDERS.rateComment')"
-              v-model.trim="data.rateComment"
-              readonly
-            />
-          </div> -->
+            <base-input v-if="data.rateComment" rows="5" type="textarea" :placeholder="$t('PLACEHOLDERS.rateComment')"
+              v-model.trim="data.rateComment" readonly />
+          </div>
           <!-- ********** End:: Driver Rate Data ********** -->
 
           <!-- ********** End:: Order Completion Image ********** -->
@@ -348,7 +342,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyC2MTR_vRbsbQQRPt5f5ZLCvvaKOpzkzlA"></script>
 <script>
 // import ProductCard from "@/components/ui/ProductCard.vue";
-// import RatingPreview from "@/components/ui/RatingPreview.vue";
+import RatingPreview from "@/components/ui/RatingPreview.vue";
 // import ImagePreviewCard from "@/components/ui/ImagePreviewCard.vue";
 
 export default {
@@ -356,7 +350,7 @@ export default {
 
   components: {
     // ProductCard,
-    // RatingPreview,
+    RatingPreview,
     // ImagePreviewCard,
   },
 

@@ -21,29 +21,31 @@
           <!-- End:: Image Upload Input -->
 
           <!-- Start:: Name Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.name_provider')" v-model.trim="data.name" />
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.name_provider')"
+            v-model.trim="data.name" />
           <!-- End:: Name Input -->
 
           <!-- Start:: Status Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.provider_type')" v-model="data.type" />
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.provider_type')" v-model="data.type" />
           <!-- End:: Status Input -->
 
           <!-- Start:: Phone Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.phone')" v-model.trim="data.phone" />
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.phone')" v-model.trim="data.phone" />
           <!-- End:: Phone Input -->
 
           <!-- Start:: email Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.email')" v-model.trim="data.email" />
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.email')" v-model.trim="data.email" />
           <!-- End:: email Input -->
 
           <!-- Start:: Name Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.provider_code')"
-            v-model.trim="data.provider_code" />
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.provider_code')"
+            v-if="data.provider_code" v-model.trim="data.provider_code" />
           <!-- End:: Name Input -->
 
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.status')" v-model="data.active" />
+          <!-- <base-input col="6" type="text" v-if="data.active" disabled :placeholder="$t('PLACEHOLDERS.status')"
+            v-model="data.active" /> -->
 
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.License_number')"
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.License_number')"
             v-model.trim="data.License_number" />
 
 
@@ -76,7 +78,7 @@
 
             <div class="col-lg-6 col-12">
               <!-- Start:: Name Input -->
-              <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.company_name')"
+              <base-input col="12" type="text" disabled :placeholder="$t('PLACEHOLDERS.company_name')"
                 v-model.trim="data.company_name" />
               <!-- End:: Name Input -->
             </div>
@@ -86,13 +88,13 @@
           <!-- <h5>{{ $t("PLACEHOLDERS.address_info") }}</h5> -->
 
           <!-- Start:: Name Input -->
-          <!-- <base-input col="6" type="text" :placeholder="$t('SIDENAV.Cities.name')" v-model.trim="data.country" /> -->
+          <!-- <base-input col="6" type="text" disabled :placeholder="$t('SIDENAV.Cities.name')" v-model.trim="data.country" /> -->
           <!-- End:: Name Input -->
           <!-- Start:: Name Input -->
-          <!-- <base-input col="6" type="text" :placeholder="$t('TABLES.Addresses.area')" v-model.trim="data.region" /> -->
+          <!-- <base-input col="6" type="text" disabled :placeholder="$t('TABLES.Addresses.area')" v-model.trim="data.region" /> -->
           <!-- End:: Name Input -->
           <!-- Start:: Name Input -->
-          <!-- <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.address')" v-model.trim="data.address" /> -->
+          <!-- <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.address')" v-model.trim="data.address" /> -->
           <!-- End:: Name Input -->
 
         </div>

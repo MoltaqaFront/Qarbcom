@@ -2,7 +2,7 @@
   <div class="crud_form_wrapper">
     <!-- Start:: Title -->
     <div class="form_title_wrapper">
-      <h4>{{ $t("BUTTONS.addStates") }}</h4>
+      <h4>{{ $t("BUTTONS.updateStates") }}</h4>
     </div>
     <!-- End:: Title -->
 
@@ -21,7 +21,7 @@
 
           <!-- Start:: city Input -->
           <base-select-input col="4" :optionsList="allCities" :placeholder="$t('SIDENAV.Cities.name')"
-            v-model="data.city_id" />
+            v-model="data.city_id" required />
           <!-- End:: city Input -->
 
           <!-- Start:: Deactivate Switch Input -->
@@ -98,7 +98,7 @@ export default {
       // Start:: Append Request Data
       REQUEST_DATA.append("name[ar]", this.data.nameAr);
       REQUEST_DATA.append("name[en]", this.data.nameEn);
-      REQUEST_DATA.append("city_id", this.data.city_id?.id);
+      REQUEST_DATA.append("country_id", this.data.city_id?.id);
       REQUEST_DATA.append("is_active", +this.data.active);
       REQUEST_DATA.append("_method", "PUT");
       // Start:: Append Request Data
@@ -128,7 +128,7 @@ export default {
         });
         this.data.nameAr = res.data.data.district.name_ar;
         this.data.nameEn = res.data.data.district.name_en;
-        this.data.city_id = res.data.data.district.city;
+        this.data.city_id = res.data.data.district.country;
         this.data.active = res.data.data.district.is_active;
       } catch (error) {
         this.loading = false;
@@ -142,7 +142,7 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: `cities`,
+          url: `countries`,
         });
         this.allCities = res.data.data;
       } catch (error) {

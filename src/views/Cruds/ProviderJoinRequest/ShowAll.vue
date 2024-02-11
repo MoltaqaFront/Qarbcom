@@ -135,15 +135,15 @@
             </a-tooltip>
 
             <template v-if="$can('providers reject', 'providers')">
-              <a-tooltip placement="bottom" v-if="!item.is_active">
+              <!-- <a-tooltip placement="bottom" v-if="!item.is_active">
                 <template slot="title">
                   <span>{{ $t("MESSAGES.reject_provider") }}</span>
                 </template>
                 <button class="btn_activate" @click="HandlingItemActivationStatus(item)">
                   <i class="fad fa-check-circle"></i>
                 </button>
-              </a-tooltip>
-              <a-tooltip placement="bottom" v-if="item.is_active">
+              </a-tooltip> -->
+              <a-tooltip placement="bottom">
                 <template slot="title">
                   <span>{{ $t("MESSAGES.reject_provider") }}</span>
                 </template>
@@ -190,8 +190,6 @@
 
         </template>
         <!-- ======================== End:: Dialogs ======================== -->
-
-
       </v-data-table>
       <!--  =========== End:: Data Table =========== -->
     </main>

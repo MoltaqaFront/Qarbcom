@@ -5,6 +5,8 @@
       <form @submit.prevent="validateFormInputs">
         <div class="row">
 
+          <h3>{{ $t("SIDENAV.settings.title") }}</h3>
+
           <!-- Start:: Tax Percentage Input -->
           <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.VAT_percentage')"
             v-model.trim="data.VAT_percentage" />
@@ -31,13 +33,18 @@
           <!-- End:: Driver's Daily Orders Amount Input -->
 
           <!-- Start:: Driver's Daily Orders Amount Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.Completed_order_points')"
-            v-model.trim="data.Completed_order_points" />
-          <!-- End:: Driver's Daily Orders Amount Input -->
-
-          <!-- Start:: Driver's Daily Orders Amount Input -->
           <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.One_riyal_equals_points')"
             v-model.trim="data.One_riyal_equals_points" />
+          <!-- End:: Driver's Daily Orders Amount Input -->
+
+          <h5>{{ $t("PLACEHOLDERS.completed_orders_points") }}</h5>
+
+          <!-- Start:: Driver's Daily Orders Amount Input -->
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.Completed_order_points')"
+            v-model.trim="data.Completed_order_points" />
+
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.completed_orders_count')"
+            v-model.trim="data.Number_of_completed_orders" />
           <!-- End:: Driver's Daily Orders Amount Input -->
 
           <!-- Start:: Submit Button Wrapper -->
@@ -66,6 +73,7 @@ export default {
       // Start:: Data Collection To Send
       data: {
         VAT_percentage: null,
+        Number_of_completed_orders: null,
         Application_commission_percentage: null,
         Cancellation_Rejection_percentage: null,
         Reminder_before_the_trip_date_by_duration: null,
@@ -89,6 +97,7 @@ export default {
         });
         // Start:: Set Data
         this.data.VAT_percentage = res.data.data.setting.value.Value_added_tax_rate;
+        this.data.Number_of_completed_orders = res.data.data.setting.value.Number_of_completed_orders;
         this.data.Application_commission_percentage = res.data.data.setting.value.Application_commission_percentage;
         this.data.Cancellation_Rejection_percentage = res.data.data.setting.value.cancellation_or_rejection_rate;
         this.data.Reminder_before_the_trip_date_by_duration = res.data.data.setting.value.A_reminder_several_days_before_the_vehicle_license_expiration_date;
@@ -110,6 +119,7 @@ export default {
       // Start:: Append Request Data
       REQUEST_DATA.append("key", "dashboard-admin-setting");
       REQUEST_DATA.append("value[Value_added_tax_rate]", this.data.VAT_percentage);
+      REQUEST_DATA.append("value[Number_of_completed_orders]", this.data.Number_of_completed_orders);
 
       REQUEST_DATA.append("value[Application_commission_percentage]", this.data.Application_commission_percentage);
       REQUEST_DATA.append("value[cancellation_or_rejection_rate]", this.data.Cancellation_Rejection_percentage);

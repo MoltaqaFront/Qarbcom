@@ -2,7 +2,7 @@
   <div class="crud_form_wrapper">
     <!-- Start:: Title -->
     <div class="form_title_wrapper">
-      <h4>{{ $t("PLACEHOLDERS.add_anchor") }}</h4>
+      <h4>{{ $t("PLACEHOLDERS.show_anchor") }}</h4>
     </div>
     <!-- End:: Title -->
 
@@ -19,10 +19,11 @@
           <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.nameEn')" v-model.trim="data.nameEn" disabled />
 
 
+          <base-input col="6" type="text" :placeholder="$t('SIDENAV.Cities.name')" v-model.trim="data.city_id" disabled />
+
           <base-input col="6" type="text" :placeholder="$t('TABLES.Addresses.area')" v-model.trim="data.district_id"
             disabled />
 
-          <base-input col="6" type="text" :placeholder="$t('SIDENAV.Cities.name')" v-model.trim="data.city_id" disabled />
 
           <!-- End:: Name Input -->
 
@@ -77,8 +78,8 @@ export default {
         });
         this.data.nameAr = res.data.data.anchor.name_ar;
         this.data.nameEn = res.data.data.anchor.name_en;
-        this.data.city_id = res.data.data.anchor.city;
-        this.data.district_id = res.data.data.anchor.district;
+        this.data.city_id = res.data.data.anchor.country.name;
+        this.data.district_id = res.data.data.anchor.district.name;
         this.data.active = res.data.data.anchor.is_active;
         // console.log(res.data.body.add_space)
       } catch (error) {

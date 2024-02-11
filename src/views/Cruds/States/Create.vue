@@ -98,7 +98,7 @@ export default {
       // Start:: Append Request Data
       REQUEST_DATA.append("name[ar]", this.data.nameAr);
       REQUEST_DATA.append("name[en]", this.data.nameEn);
-      REQUEST_DATA.append("city_id", this.data.city_id?.id);
+      REQUEST_DATA.append("country_id", this.data.city_id?.id);
       REQUEST_DATA.append("is_active", +this.data.active);
       // Start:: Append Request Data
 
@@ -123,7 +123,7 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: `cities`,
+          url: `countries`,
         });
         this.allCities = res.data.data;
       } catch (error) {

@@ -4,6 +4,7 @@
     <div class="single_step_form_content_wrapper">
       <form @submit.prevent="validateFormInputs">
         <div class="row">
+          <h3>{{ $t("PLACEHOLDERS.contact_admins") }}</h3>
 
           <div class="row justify-content-center">
 
@@ -115,7 +116,7 @@ export default {
         this.data.facebook_link = res.data.data.setting.value.facebook;
         this.data.snap_link = res.data.data.setting.value.snapchat;
         this.data.insta_link = res.data.data.setting.value.instagram;
-        
+
         // End:: Set Data
       } catch (error) {
         console.log(error.response.data.message);
@@ -160,21 +161,14 @@ export default {
 
     // Start:: validate Form Inputs
     validateFormInputs() {
-      this.submitForm();
-      // this.isWaitingRequest = true;
-
-      // if (!this.data.fast_order_cancel_time) {
-      //   this.isWaitingRequest = false;
-      //   this.$message.error(this.$t("VALIDATION.fast_order_cancel_time"));
-      //   return;
-      // } else if (!this.data.reservation_cancel_time) {
-      //   this.isWaitingRequest = false;
-      //   this.$message.error(this.$t("VALIDATION.reservation_cancel_time"));
-      //   return;
-      // } else {
-      //   this.submitForm();
-      //   return;
-      // }
+      if (!this.phones.every(item => /^05\d{8}$/.test(item.phone))) {  // Phone number validation
+        this.isWaitingRequest = false;
+        this.$message.error(this.$t("VALIDATION.phone_num"));
+        return;
+      } else {
+        this.submitForm();
+        return;
+      }
     },
     // End:: validate Form Inputs
   },

@@ -16,8 +16,7 @@
           <!-- End:: Name Input -->
 
           <!-- Start:: Name Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.titleEn')" v-model.trim="data.nameEn"
-             required />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.titleEn')" v-model.trim="data.nameEn" required />
 
           <!-- End:: Name Input -->
 

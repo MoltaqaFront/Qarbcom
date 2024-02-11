@@ -40,11 +40,11 @@
 
               <div class="col-lg-6 col-12">
                 <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameAr')"
-                  v-model.trim="item.field_value_ar" @input="validateInput" required />
+                  v-model.trim="item.value_ar" @input="validateInput" required />
               </div>
               <div class="col-lg-6 col-12">
                 <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameEn')"
-                  v-model.trim="item.field_value_en" @input="removeArabicCharacters" @copy="onCopy" @paste="onPaste"
+                  v-model.trim="item.value_en" @input="removeArabicCharacters" @copy="onCopy" @paste="onPaste"
                   required />
               </div>
 
@@ -227,19 +227,19 @@ export default {
         this.data.nameAr = res.data.data.additionalField.name_ar;
         this.data.nameEn = res.data.data.additionalField.name_en;
         this.data.vehicle_type = res.data.data.additionalField.vehicleTypes;
-        this.field_values = res.data.data.additionalField.field_values;
+        this.field_values = res.data.data.additionalField.values;
         this.data.is_required = res.data.data.additionalField.is_required;
 
-        this.data.field_type = res.data.data.additionalField.field_type;
+        this.data.field_type = { id: 0, name: res.data.data.additionalField.translated_field_type, value: res.data.data.additionalField.type };
 
-        if (this.data.field_type) {
-          this.data.field_type =
-          {
-            id: 0,
-            name: this.data.field_type,
-            value: this.data.field_type,
-          }
-        }
+        // if (this.data.field_type) {
+        //   this.data.field_type =
+        //   {
+        //     id: 0,
+        //     name: this.data.field_type,
+        //     value: this.data.field_type,
+        //   }
+        // }
 
         if (!this.data.is_required) {
           this.data.is_required =

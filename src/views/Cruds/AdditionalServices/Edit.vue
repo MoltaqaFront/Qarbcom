@@ -107,7 +107,7 @@ export default {
         this.$router.push({ path: "/additionalServices/all" });
       } catch (error) {
         this.isWaitingRequest = false;
-        this.$message.error(error.response.data.errors);
+        this.$message.error(error.response.data.message);
       }
     },
     // End:: Submit Form

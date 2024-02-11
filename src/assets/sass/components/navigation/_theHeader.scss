@@ -150,7 +150,7 @@ nav {
         .lang_toggler_wrapper {
           .lang_toggeler_btn {
             @include flexCenterAlignment;
-            width: 33px;
+            min-width: 33px;
             height: 33px;
             color: var(--theme_text_clr);
             font-size: 18px;
@@ -543,14 +543,14 @@ nav {
 
       .navbar_btns_wrapper {
         column-gap: 0;
-  
+
         .group {
           column-gap: 5px;
-  
+
           .user_profile_menu_wrapper {
             display: none;
           }
-  
+
           .lang_toggler_wrapper {
             .lang_toggeler_btn {
               width: 30px;
@@ -559,34 +559,34 @@ nav {
               border-radius: 6px;
             }
           }
-  
+
           .user_notification_content_wrapper {
             .notifications_menu_wrapper {
               min-width: 320px;
               left: 160%;
             }
           }
-  
+
           a {
             &.chats_route {
               display: none;
             }
           }
-  
+
           button {
             font-size: 20px;
             padding: 4px 8px;
-  
+
             &.theme_changer {
               width: unset;
               height: unset;
-  
+
               svg,
               i {
                 font-size: 20px;
               }
             }
-  
+
             &.small_screens_navbar_toggeler {
               display: block;
               font-size: 22px;
@@ -602,24 +602,23 @@ nav {
       .chats_list {
         min-width: 90%;
         max-width: 90%;
-  
+
         .chat_route_wrapper {
           .chat_route_btn {
             column-gap: 10px;
             padding: 15px 8px;
-  
+
             .conversation_avatar_wrapper {
               img {
                 width: 75px;
                 height: 75px;
               }
             }
-  
+
             .conversation_details_wrapper {
               max-width: 90%;
-  
+
               .name_and_last_message_date_wrapper {
-  
                 .name,
                 .last_message_date_wrapper {
                   font-size: 15px;

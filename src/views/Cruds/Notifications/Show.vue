@@ -2,7 +2,7 @@
   <div class="crud_form_wrapper">
     <!-- Start:: Title -->
     <div class="form_title_wrapper">
-      <h4>{{ $t("TITLES.showNotification") }}</h4>
+      <h4>{{ $t("PLACEHOLDERS.view_notification_details") }}</h4>
     </div>
     <!-- End:: Title -->
 
@@ -11,38 +11,24 @@
       <form @submit.prevent="validateFormInputs">
         <div class="row justify-content-center">
           <!-- Start:: Receiver Type Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.receiverType')" v-model.trim="data.sender_type"
+          <base-input col="12" type="text" :placeholder="$t('TABLES.Notifications.date')" v-model.trim="data.created_at"
             required readonly />
+
+          <base-input col="6" type="text" :placeholder="$t('TABLES.Notifications.receiverType')"
+            v-model.trim="data.sender_type" required readonly />
           <!-- End:: Receiver Type Input -->
-
-          <!-- Start:: Clients Type Input -->
-
-          <!-- <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.clients')" v-model.trim="data.clients"
-            required /> -->
-          <!-- End:: Clients Type Input -->
-
+          <!-- Start:: Title Ar Input -->
+          <base-input col="6" type="text" :placeholder="$t('TABLES.Notifications.title')" v-model.trim="data.title"
+            required readonly />
+          <!-- End:: Title Ar Input -->
 
           <div class="col-12">
             <div class="row">
-              <!-- Start:: Title Ar Input -->
-              <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.titleAr')" v-model.trim="data.titleAr"
-                required readonly />
-              <!-- End:: Title Ar Input -->
-
-              <!-- Start:: Title En Input -->
-              <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.titleEn')" v-model.trim="data.titleEn"
-                required readonly />
-              <!-- End:: Title En Input -->
-
               <!-- Start:: Content Ar Input -->
-              <base-input col="6" rows="7" type="textarea" :placeholder="$t('PLACEHOLDERS.contentAr')"
-                v-model.trim="data.contentAr" required readonly />
+              <base-input col="12" rows="5" type="textarea" :placeholder="$t('TABLES.Notifications.notification')"
+                v-model.trim="data.body" required readonly />
               <!-- End:: Content Ar Input -->
 
-              <!-- Start:: Content En Input -->
-              <base-input col="6" rows="7" type="textarea" :placeholder="$t('PLACEHOLDERS.contentEn')"
-                v-model.trim="data.contentEn" required readonly />
-              <!-- End:: Content En Input -->
             </div>
           </div>
 
@@ -107,11 +93,9 @@ export default {
 
       data: {
         sender_type: null,
-        drivers: null,
-        titleAr: null,
-        titleEn: null,
-        contentAr: null,
-        contentEn: null,
+        title: null,
+        body: null,
+        created_at: null
       }
       // End:: Data Collection To Send
     };
@@ -129,17 +113,17 @@ export default {
     async getNotificationData() {
       try {
         let res = await this.$axios({
-          method: "GET",
-          url: `main/show-send-notification?notification_id=${this.$route.params.id}`
+          method: "POST",
+          url: `notification/show`,
+          data: { notification_id: `${this.$route.params.id}` }
         });
 
 
-        console.log(res.data.data)
-        this.data.sender_type = res.data.data.sender_type;
-        this.data.titleAr = res.data.data.title_ar;
-        this.data.titleEn = res.data.data.title_en;
-        this.data.contentAr = res.data.data.content_ar;
-        this.data.contentEn = res.data.data.content_en;
+        console.log(res.data.data.notification.data.type)
+        this.data.sender_type = res.data.data.notification.receiver_type;
+        this.data.title = res.data.data.notification.data.title;
+        this.data.body = res.data.data.notification.data.body;
+        this.data.created_at = res.data.data.notification.created_at;
 
       } catch (error) {
         this.loading = false;

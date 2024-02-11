@@ -13,14 +13,14 @@
       <form>
         <div class="row">
 
-          <h5>{{ $t("PLACEHOLDERS.provider_info") }}</h5>
+          <!-- <h5>{{ $t("PLACEHOLDERS.provider_info") }}</h5> -->
 
-          <base-image-upload-input col="12" identifier="image" :preSelectedImage="data.image"
+          <base-image-upload-input col="12" identifier="image" :preSelectedImage="data.image.path"
             :placeholder="$t('PLACEHOLDERS.user_image')" @selectImage="selectImage" disabled />
 
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.user_name')" v-model="data.name" />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.user_name')" v-model="data.name" disabled />
 
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.user_status')" v-model="data.active" />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.user_status')" v-model="data.active" disabled />
 
           <!-- Start:: Image Upload Input -->
           <base-image-upload-input col="12" identifier="client_image" :placeholder="$t('PLACEHOLDERS.provider_image')"
@@ -28,19 +28,20 @@
           <!-- End:: Image Upload Input -->
 
           <!-- Start:: Name Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.name_provider')"
-            v-model.trim="data.parent_name" />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.name_provider')" v-model.trim="data.parent_name"
+            disabled />
           <!-- End:: Name Input -->
 
           <!-- Start:: Phone Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.phone')" v-model.trim="data.phone" />
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.phone')" v-model.trim="data.phone" />
           <!-- End:: Phone Input -->
 
           <!-- Start:: email Input -->
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.email')" v-model.trim="data.email" />
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.email')" v-model.trim="data.email" />
           <!-- End:: email Input -->
 
-
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.employee_permissions')"
+            v-model.trim="data.user_type" />
 
         </div>
       </form>
@@ -90,7 +91,8 @@ export default {
         country: null,
         region: null,
         address: null,
-        active: false
+        active: false,
+        user_type: null
       },
       // End:: Data
     };
@@ -115,6 +117,7 @@ export default {
         this.data.parent_name = res.data.data.user.parent_name;
         this.data.phone = res.data.data.user.mobile;
         this.data.email = res.data.data.user.email;
+        this.data.user_type = res.data.data.user.roles_name[0];
         this.data.company_name = res.data.data.user.company_name;
         this.data.active = res.data.data.user.is_active;
         this.data.provider_code = res.data.data.user.code;

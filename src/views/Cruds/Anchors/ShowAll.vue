@@ -20,13 +20,13 @@
               <!-- End:: Name Input -->
 
               <!-- Start:: city Input -->
-              <base-select-input col="3" :optionsList="allDistricts" :placeholder="$t('TABLES.Addresses.area')"
-                v-model="filterOptions.district_id" />
+              <base-select-input col="3" :optionsList="allCities" :placeholder="$t('SIDENAV.Cities.name')"
+                v-model="filterOptions.city_id" @input="showDistricts" />
               <!-- End:: city Input -->
 
               <!-- Start:: city Input -->
-              <base-select-input col="3" :optionsList="allCities" :placeholder="$t('SIDENAV.Cities.name')"
-                v-model="filterOptions.city_id" />
+              <base-select-input col="3" :optionsList="allDistricts" :placeholder="$t('TABLES.Addresses.area')"
+                v-model="filterOptions.district_id" />
               <!-- End:: city Input -->
 
               <!-- Start:: Status Input -->
@@ -278,7 +278,7 @@ export default {
         },
         {
           text: this.$t("SIDENAV.Cities.name"),
-          value: "city.name",
+          value: "country.name",
           sortable: false,
           align: "center",
         },
@@ -387,7 +387,7 @@ export default {
           params: {
             page: this.paginations.current_page,
             name: this.filterOptions.title,
-            city_id: this.filterOptions.city_id?.id,
+            country_id: this.filterOptions.city_id?.id,
             district_id: this.filterOptions.district_id?.id,
             status: this.filterOptions.is_active?.value,
           },
@@ -470,7 +470,10 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: `cities`,
+          url: `countries`,
+          params: {
+            "status": 1
+          }
         });
         this.allCities = res.data.data;
       } catch (error) {
@@ -479,10 +482,15 @@ export default {
       }
     },
     async showDistricts() {
+      this.filterOptions.district_id = null;
       try {
         let res = await this.$axios({
           method: "GET",
           url: `districts`,
+          params: {
+            "country_id": this.filterOptions.city_id?.id,
+            "status": 1
+          }
         });
         this.allDistricts = res.data.data;
       } catch (error) {
@@ -506,7 +514,7 @@ export default {
     }
     this.setTableRows();
     this.showCities();
-    this.showDistricts();
+    // this.showDistricts();
     // End:: Fire Methods
   },
 };

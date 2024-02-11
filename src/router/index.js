@@ -40,17 +40,29 @@ import EditStates from "../views/Cruds/States/Edit.vue";
 import ShowStates from "../views/Cruds/States/Show.vue";
 // ============== End:: Regions  Routes
 
-// ============== Start:: Financial Reports Routes
-import FinancialReportsHome from "../views/Cruds/FinancialReports/Home.vue";
-import AllFinancialReports from "../views/Cruds/FinancialReports/ShowAll.vue";
-import ShowFinancialReport from "../views/Cruds/FinancialReports/Show.vue";
-// ============== End:: Financial Reports Routes
+// ============== Start:: Customer Reports Routes
+import CustomerReportsHome from "../views/Cruds/CustomerReports/Home.vue";
+import AllCustomerReports from "../views/Cruds/CustomerReports/ShowAll.vue";
+import ShowCustomerReport from "../views/Cruds/CustomerReports/Show.vue";
+// ============== End:: Customer Reports Routes
 
-// ============== Start:: Financial Reports Routes
-import PackageReportsHome from "../views/Cruds/PackageReports/Home.vue";
-import AllPackageReports from "../views/Cruds/PackageReports/ShowAll.vue";
-import ShowPackageReports from "../views/Cruds/PackageReports/Show.vue";
-// ============== End:: Financial Reports Routes
+// ============== Start:: BoatReports Routes
+import BoatReportsHome from "../views/Cruds/BoatReports/Home.vue";
+import AllBoatReports from "../views/Cruds/BoatReports/ShowAll.vue";
+import ShowBoatReports from "../views/Cruds/BoatReports/Show.vue";
+// ============== End:: BoatReports Routes
+
+// ============== Start:: CompletedOrdersReports Routes
+import CompletedOrdersReportsHome from "../views/Cruds/CompletedOrdersReports/Home.vue";
+import AllCompletedOrdersReports from "../views/Cruds/CompletedOrdersReports/ShowAll.vue";
+import ShowCompletedOrdersReports from "../views/Cruds/CompletedOrdersReports/Show.vue";
+// ============== End:: CompletedOrdersReports Routes
+
+// ============== Start:: InCompletedOrdersReports Routes
+import InCompletedOrdersReportsHome from "../views/Cruds/InCompletedOrdersReports/Home.vue";
+import AllInCompletedOrdersReports from "../views/Cruds/InCompletedOrdersReports/ShowAll.vue";
+import ShowInCompletedOrdersReports from "../views/Cruds/InCompletedOrdersReports/Show.vue";
+// ============== End:: InCompletedOrdersReports Routes
 
 // ============== Start:: States  Routes
 import NationalitiesHome from "../views/Cruds/Nationalities/Home.vue";
@@ -104,19 +116,36 @@ import AllOrders from "../views/Cruds/Orders/ShowAll.vue";
 import ShowOrder from "../views/Cruds/Orders/Show.vue";
 // ============== End:: Orders Routes
 
-// ============== Start:: OrdersReservations
-import OrdersReservationsHome from "../views/Cruds/OrdersReservations/Home.vue";
-import AllOrdersReservations from "../views/Cruds/OrdersReservations/ShowAll.vue";
-import ShowOrdersReservations from "../views/Cruds/OrdersReservations/Show.vue";
-// ============== End:: OrdersReservations
+// ============== Start:: Vehicles Routes
+import VehiclesHome from "../views/Cruds/Vehicles/Home.vue";
+import AllVehicles from "../views/Cruds/Vehicles/ShowAll.vue";
+import EditVehicles from "../views/Cruds/Vehicles/Edit.vue";
+import CreateVehicles from "../views/Cruds/Vehicles/Create.vue";
+import ShowVehicles from "../views/Cruds/Vehicles/Show.vue";
+// ============== End:: Vehicles Routes
+
+// ============== Start:: PostPoneOrders Routes
+import PostPoneOrdersHome from "../views/Cruds/PostPoneOrders/Home.vue";
+import AllPostPoneOrders from "../views/Cruds/PostPoneOrders/ShowAll.vue";
+import ShowPostPoneOrders from "../views/Cruds/PostPoneOrders/Show.vue";
+// ============== End:: PostPoneOrders Routes
+
+// ============== Start:: Complaints Routes
+import ComplaintsHome from "../views/Cruds/Complaints/Home.vue";
+import AllComplaints from "../views/Cruds/Complaints/ShowAll.vue";
+import ShowComplaints from "../views/Cruds/Complaints/Show.vue";
+// ============== End:: Complaints Routes
 
 // ============== Start:: Offers Routes
 import OffersHome from "../views/Cruds/Offers/Home.vue";
 import AllOffers from "../views/Cruds/Offers/ShowAll.vue";
-import EditOffers from "../views/Cruds/Offers/Edit.vue";
-import CreateOffers from "../views/Cruds/Offers/Create.vue";
-import ShowOffer from "../views/Cruds/Offers/Show.vue";
 // ============== End:: Offers Routes
+
+// ============== Start:: Rates Routes
+import RatesHome from "../views/Cruds/Rates/Home.vue";
+import AllRates from "../views/Cruds/Rates/ShowAll.vue";
+import RatesShow from "../views/Cruds/Rates/Show.vue";
+// ============== End:: Rates Routes
 
 // ============== Start:: Ads Routes
 import AdsHome from "../views/Cruds/Ads/Home.vue";
@@ -188,6 +217,12 @@ import AllProvidersEmployee from "../views/Cruds/ProvidersEmployee/ShowAll.vue";
 import ShowProvidersEmployee from "../views/Cruds/ProvidersEmployee/Show.vue";
 // ============== End:: ProvidersEmployee Routes
 
+// ============== Start:: ProviderEditRequests Routes
+import ProviderEditRequestsHome from "../views/Cruds/ProviderEditRequests/Home.vue";
+import AllProviderEditRequests from "../views/Cruds/ProviderEditRequests/ShowAll.vue";
+import ShowProviderEditRequests from "../views/Cruds/ProviderEditRequests/Show.vue";
+// ============== End:: ProviderEditRequests Routes
+
 // ============== Start:: App Settings Routes
 import AppSettingsHome from "../views/Cruds/AppSettings/Home.vue";
 import GeneralSettings from "../views/Cruds/AppSettings/GeneralSettings.vue";
@@ -213,6 +248,7 @@ import ShowAdmin from "../views/Cruds/Admins/Show.vue";
 import NotificationsHome from "../views/Cruds/Notifications/Home.vue";
 import AllNotifications from "../views/Cruds/Notifications/ShowAll.vue";
 import CreateNotifications from "../views/Cruds/Notifications/Create.vue";
+import ShowNotifications from "../views/Cruds/Notifications/Show.vue";
 // ============== End:: All Notifications Routes
 
 // ============== Start:: Forbidden Route
@@ -312,6 +348,44 @@ const routes = [
         ],
       },
       // End:: Clients Routes Config
+
+      // Start:: Ads  Config
+      {
+        path: "/vehicles",
+        name: "VehiclesHome",
+        component: VehiclesHome,
+        meta: {
+          middleware: [auth],
+        },
+        children: [
+          {
+            path: "all",
+            name: "AllVehicles",
+            component: AllVehicles,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "vehicles index",
+                subject: "vehicles",
+              },
+            },
+          },
+          {
+            path: "show/:id",
+            name: "ShowVehicles",
+            component: ShowVehicles,
+            props: true,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "vehicles show",
+                subject: "vehicles",
+              },
+            },
+          },
+        ],
+      },
+      // End:: Vehicles Config
 
       // Start:: providers Routes Config
       {
@@ -427,6 +501,44 @@ const routes = [
       },
       // End:: ProvidersEmployee Routes Config
 
+      // Start:: ProviderEditRequests Routes Config
+      {
+        path: "/service_provider_edit_requests",
+        name: "ProviderEditRequestsHome",
+        component: ProviderEditRequestsHome,
+        meta: {
+          middleware: [auth],
+        },
+        children: [
+          {
+            path: "all",
+            name: "AllProviderEditRequests",
+            component: AllProviderEditRequests,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "providers index",
+                subject: "providers",
+              },
+            },
+          },
+          {
+            path: "show/:id",
+            name: "ShowProviderEditRequests",
+            component: ShowProviderEditRequests,
+            props: true,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "providers show",
+                subject: "providers",
+              },
+            },
+          },
+        ],
+      },
+      // End:: ProviderEditRequests Routes Config
+
       // Start:: Drivers Routes Config
       {
         path: "/drivers",
@@ -504,9 +616,47 @@ const routes = [
       },
       // End:: Drivers join Routes Config
 
+      // Start:: Complaints  Config
+      {
+        path: "/complaints",
+        name: "ComplaintsHome",
+        component: ComplaintsHome,
+        meta: {
+          middleware: [auth],
+        },
+        children: [
+          {
+            path: "all",
+            name: "AllComplaints",
+            component: AllComplaints,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "complaints index",
+                subject: "complaints",
+              },
+            },
+          },
+          {
+            path: "show/:id",
+            name: "ShowComplaints",
+            component: ShowComplaints,
+            props: true,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "complaints show",
+                subject: "complaints",
+              },
+            },
+          },
+        ],
+      },
+      // End:: complaints Config
+
       // Start:: Regions  Config
       {
-        path: "/cities",
+        path: "/countries",
         name: "RegionsHome",
         component: RegionsHome,
         meta: {
@@ -520,8 +670,8 @@ const routes = [
             meta: {
               middleware: [auth],
               requiresPermission: {
-                action: "cities index",
-                subject: "cities",
+                action: "countries index",
+                subject: "countries",
               },
             },
           },
@@ -532,8 +682,8 @@ const routes = [
             meta: {
               middleware: [auth],
               requiresPermission: {
-                action: "cities create",
-                subject: "cities",
+                action: "countries create",
+                subject: "countries",
               },
             },
           },
@@ -545,8 +695,8 @@ const routes = [
             meta: {
               middleware: [auth],
               requiresPermission: {
-                action: "cities edit",
-                subject: "cities",
+                action: "countries edit",
+                subject: "countries",
               },
             },
           },
@@ -558,8 +708,8 @@ const routes = [
             meta: {
               middleware: [auth],
               requiresPermission: {
-                action: "cities show",
-                subject: "cities",
+                action: "countries show",
+                subject: "countries",
               },
             },
           },
@@ -850,65 +1000,101 @@ const routes = [
       },
       // End:: nationalities Config
 
-      // Start:: Financial Reports Routes Config
+      // Start:: customer-reports Routes Config
       {
-        path: "/financial-reports",
-        name: "FinancialReportsHome",
-        component: FinancialReportsHome,
+        path: "/customer-reports",
+        name: "CustomerReportsHome",
+        component: CustomerReportsHome,
         meta: {
           middleware: [auth],
         },
         children: [
           {
             path: "all",
-            name: "AllFinancialReports",
-            component: AllFinancialReports,
+            name: "AllCustomerReports",
+            component: AllCustomerReports,
             meta: {
               middleware: [auth],
+              requiresPermission: {
+                action: "reports index",
+                subject: "reports",
+              },
             },
           },
-          // {
-          //   path: "show/:id",
-          //   name: "ShowFinancialReport",
-          //   component: ShowFinancialReport,
-          //   props: true,
-          //   meta: {
-          //     middleware: [auth],
-          //   },
-          // },
         ],
       },
-      // End:: Financial Reports Routes Config
+      // End:: customer-reports Routes Config
 
-      // Start:: Packages Reports Routes Config
+      // Start:: completed-orders-report Routes Config
       {
-        path: "/packages-reports",
-        name: "PackageReportsHome",
-        component: PackageReportsHome,
+        path: "/completed-orders-report",
+        name: "CompletedOrdersReportsHome",
+        component: CompletedOrdersReportsHome,
         meta: {
           middleware: [auth],
         },
         children: [
           {
             path: "all",
-            name: "AllPackageReports",
-            component: AllPackageReports,
+            name: "AllCompletedOrdersReports",
+            component: AllCompletedOrdersReports,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "reports index",
+                subject: "reports",
+              },
+            },
+          },
+        ],
+      },
+      // End:: completed-orders-report Routes Config
+
+      // Start:: InCompletedOrdersReports Routes Config
+      {
+        path: "/customer-reports",
+        name: "InCompletedOrdersReportsHome",
+        component: InCompletedOrdersReportsHome,
+        meta: {
+          middleware: [auth],
+        },
+        children: [
+          {
+            path: "all",
+            name: "AllInCompletedOrdersReports",
+            component: AllInCompletedOrdersReports,
             meta: {
               middleware: [auth],
             },
           },
-          // {
-          //   path: "show/:id",
-          //   name: "ShowFinancialReport",
-          //   component: ShowFinancialReport,
-          //   props: true,
-          //   meta: {
-          //     middleware: [auth],
-          //   },
-          // },
         ],
       },
-      // End:: packages Reports Routes Config
+      // End:: InCompletedOrdersReports Routes Config
+
+      // Start:: boat-reports Routes Config
+      {
+        path: "/boat-reports",
+        name: "BoatReportsHome",
+        component: BoatReportsHome,
+        meta: {
+          middleware: [auth],
+        },
+        children: [
+          {
+            path: "all",
+            name: "AllBoatReports",
+            component: AllBoatReports,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "reports index",
+                subject: "reports",
+              },
+            },
+          },
+        ],
+      },
+      // End:: boat-reports Routes Config
 
       // Start:: Offers Routes Config
       {
@@ -925,32 +1111,10 @@ const routes = [
             component: AllOffers,
             meta: {
               middleware: [auth],
-            },
-          },
-          {
-            path: "show/:id",
-            name: "ShowOffer",
-            component: ShowOffer,
-            props: true,
-            meta: {
-              middleware: [auth],
-            },
-          },
-          {
-            path: "create",
-            name: "CreateOffers",
-            component: CreateOffers,
-            meta: {
-              middleware: [auth],
-            },
-          },
-          {
-            path: "edit/:id",
-            name: "EditOffers",
-            component: EditOffers,
-            props: true,
-            meta: {
-              middleware: [auth],
+              requiresPermission: {
+                action: "offers index",
+                subject: "offers",
+              },
             },
           },
         ],
@@ -1224,6 +1388,10 @@ const routes = [
             component: AllOrders,
             meta: {
               middleware: [auth],
+              requiresPermission: {
+                action: "orders index",
+                subject: "orders",
+              },
             },
           },
           {
@@ -1233,41 +1401,90 @@ const routes = [
             props: true,
             meta: {
               middleware: [auth],
+              requiresPermission: {
+                action: "orders index",
+                subject: "orders",
+              },
             },
           },
         ],
       },
       // End:: Orders Routes Config
 
-      // Start:: OrdersReservations Config
+      // Start:: postponeorders Routes Config
       {
-        path: "/ordersReservations",
-        name: "OrdersReservationsHome",
-        component: OrdersReservationsHome,
+        path: "/postponeorders",
+        name: "PostPoneOrdersHome",
+        component: PostPoneOrdersHome,
         meta: {
           middleware: [auth],
         },
         children: [
           {
             path: "all",
-            name: "AllOrdersReservations",
-            component: AllOrdersReservations,
+            name: "AllPostPoneOrders",
+            component: AllPostPoneOrders,
             meta: {
               middleware: [auth],
+              requiresPermission: {
+                action: "postponeOrders index",
+                subject: "postponeOrders",
+              },
             },
           },
           {
             path: "show/:id",
-            name: "ShowOrdersReservations",
-            component: ShowOrdersReservations,
+            name: "ShowPostPoneOrders",
+            component: ShowPostPoneOrders,
             props: true,
             meta: {
               middleware: [auth],
+              requiresPermission: {
+                action: "postponeOrders index",
+                subject: "postponeOrders",
+              },
             },
           },
         ],
       },
-      // End:: OrdersReservations Config
+      // End:: postponeorders Routes Config
+
+      // Start:: Rates Routes Config
+      {
+        path: "/rates",
+        name: "RatesHome",
+        component: RatesHome,
+        meta: {
+          middleware: [auth],
+        },
+        children: [
+          {
+            path: "all",
+            name: "AllRates",
+            component: AllRates,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "rates index",
+                subject: "rates",
+              },
+            },
+          },
+          {
+            path: "show/:id",
+            name: "RatesShow",
+            component: RatesShow,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "rates index",
+                subject: "rates",
+              },
+            },
+          },
+        ],
+      },
+      // End:: Rates Routes Config
 
       // Start:: Employees  Config
       {
@@ -1348,6 +1565,10 @@ const routes = [
         component: AppContentHome,
         meta: {
           middleware: [auth],
+          requiresPermission: {
+            action: "staticPages index",
+            subject: "staticPages",
+          },
         },
         children: [
           {
@@ -1356,6 +1577,10 @@ const routes = [
             component: AboutUs,
             meta: {
               middleware: [auth],
+              requiresPermission: {
+                action: "staticPages index",
+                subject: "staticPages",
+              },
             },
           },
           {
@@ -1364,6 +1589,10 @@ const routes = [
             component: Terms,
             meta: {
               middleware: [auth],
+              requiresPermission: {
+                action: "staticPages index",
+                subject: "staticPages",
+              },
             },
           },
           {
@@ -1372,6 +1601,10 @@ const routes = [
             component: PrivacyPolicy,
             meta: {
               middleware: [auth],
+              requiresPermission: {
+                action: "staticPages index",
+                subject: "staticPages",
+              },
             },
           },
         ],
@@ -1534,16 +1767,32 @@ const routes = [
             component: AllNotifications,
             meta: {
               middleware: [auth],
+              requiresPermission: {
+                action: "notifications index",
+                subject: "notifications",
+              },
             },
           },
           {
             path: "create",
-            name: "CreateNotificationss",
+            name: "CreateNotifications",
             component: CreateNotifications,
             meta: {
               middleware: [auth],
               requiresPermission: {
-                action: "todo create",
+                action: "notifications create",
+                subject: "notifications",
+              },
+            },
+          },
+          {
+            path: "show/:id",
+            name: "ShowNotifications",
+            component: ShowNotifications,
+            meta: {
+              middleware: [auth],
+              requiresPermission: {
+                action: "notifications show",
                 subject: "notifications",
               },
             },

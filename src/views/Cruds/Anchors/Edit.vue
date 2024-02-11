@@ -2,7 +2,7 @@
   <div class="crud_form_wrapper">
     <!-- Start:: Title -->
     <div class="form_title_wrapper">
-      <h4>{{ $t("PLACEHOLDERS.add_anchor") }}</h4>
+      <h4>{{ $t("PLACEHOLDERS.update_anchor") }}</h4>
     </div>
     <!-- End:: Title -->
 
@@ -22,16 +22,14 @@
 
 
           <!-- Start:: city Input -->
-          <base-select-input col="6" :optionsList="allDistricts" :placeholder="$t('TABLES.Addresses.area')"
-            v-model="data.district_id" />
+          <base-select-input col="6" :optionsList="allCities" :placeholder="$t('SIDENAV.Cities.name')"
+            v-model="data.city_id" @input="showDistricts" />
           <!-- End:: city Input -->
 
           <!-- Start:: city Input -->
-          <base-select-input col="6" :optionsList="allCities" :placeholder="$t('SIDENAV.Cities.name')"
-            v-model="data.city_id" />
+          <base-select-input col="6" :optionsList="allDistricts" :placeholder="$t('TABLES.Addresses.area')"
+            v-model="data.district_id" />
           <!-- End:: city Input -->
-
-          <!-- End:: Name Input -->
 
           <!-- Start:: Deactivate Switch Input -->
           <div class="input_wrapper switch_wrapper my-5">
@@ -71,7 +69,8 @@ export default {
         nameEn: null,
         active: true,
         city_id: null,
-        district_id: null
+        district_id: null,
+        new_district_id: null,
       },
       // End:: Data Collection To Send
 
@@ -144,7 +143,7 @@ export default {
       REQUEST_DATA.append("name[ar]", this.data.nameAr);
       REQUEST_DATA.append("name[en]", this.data.nameEn);
 
-      REQUEST_DATA.append("city_id", this.data.city_id?.id);
+      REQUEST_DATA.append("country_id", this.data.city_id?.id);
       REQUEST_DATA.append("district_id", this.data.district_id?.id);
 
       REQUEST_DATA.append("is_active", +this.data.active);
@@ -177,8 +176,9 @@ export default {
         });
         this.data.nameAr = res.data.data.anchor.name_ar;
         this.data.nameEn = res.data.data.anchor.name_en;
-        this.data.city_id = res.data.data.anchor.city;
+        this.data.city_id = res.data.data.anchor.country;
         this.data.district_id = res.data.data.anchor.district;
+        this.data.new_district_id = res.data.data.anchor.district;
         this.data.active = res.data.data.anchor.is_active;
         // console.log(res.data.body.add_space)
       } catch (error) {
@@ -193,7 +193,10 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: `cities`,
+          url: `countries`,
+          params: {
+            "status": 1
+          }
         });
         this.allCities = res.data.data;
       } catch (error) {
@@ -202,10 +205,16 @@ export default {
       }
     },
     async showDistricts() {
+      this.allDistricts = [];
+      this.data.district_id = null;
       try {
         let res = await this.$axios({
           method: "GET",
           url: `districts`,
+          params: {
+            "country_id": this.data.city_id?.id,
+            "status": 1
+          }
         });
         this.allDistricts = res.data.data;
       } catch (error) {
@@ -217,10 +226,11 @@ export default {
 
   },
 
-  created() {
-    this.getDataToEdit();
+  async created() {
+    await this.getDataToEdit();
     this.showCities();
     this.showDistricts();
+    this.data.district_id = this.data.new_district_id;
   },
 };
 </script>

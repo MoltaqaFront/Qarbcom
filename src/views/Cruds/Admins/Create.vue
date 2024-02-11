@@ -121,49 +121,50 @@ export default {
         this.isWaitingRequest = false;
         this.$message.error(this.$t("VALIDATION.image"));
         return;
-      } else if (!this.data.name) {
-        this.isWaitingRequest = false;
-        this.$message.error(this.$t("VALIDATION.name"));
-        return;
-      } else if (!this.data.email) {
-        this.isWaitingRequest = false;
-        this.$message.error(this.$t("VALIDATION.email"));
-        return;
-      } else if (!this.data.phone) {
-        this.isWaitingRequest = false;
-        this.$message.error(this.$t("VALIDATION.phone"));
-        return;
-      } else if (!this.data.role) {
-        this.isWaitingRequest = false;
-        this.$message.error(this.$t("VALIDATION.role"));
-        return;
-      } else if (!this.data.password) {
-        this.isWaitingRequest = false;
-        this.$message.error(this.$t("VALIDATION.password"));
-        return;
-      } else if (this.data.password.length < 6) {
-        this.isWaitingRequest = false;
-        this.$message.error(this.$t("VALIDATION.passwordLength"));
-        return;
-      } else if (!this.data.passwordConfirmation) {
-        this.isWaitingRequest = false;
-        this.$message.error(this.$t("VALIDATION.password"));
-        return;
-      } else if (this.data.passwordConfirmation.length < 6) {
-        this.isWaitingRequest = false;
-        this.$message.error(this.$t("VALIDATION.passwordLength"));
-        return;
-      } else if (
-        this.data.password !=
-        this.data.passwordConfirmation
-      ) {
-        this.isWaitingRequest = false;
-        this.$message.error(this.$t("VALIDATION.notEqualPasswords"));
-        return;
-      } else {
-        this.submitForm();
-        return;
-      }
+      } else
+        if (!this.data.name) {
+          this.isWaitingRequest = false;
+          this.$message.error(this.$t("VALIDATION.name"));
+          return;
+        } else if (!this.data.email) {
+          this.isWaitingRequest = false;
+          this.$message.error(this.$t("VALIDATION.email"));
+          return;
+        } else if (!this.data.phone) {
+          this.isWaitingRequest = false;
+          this.$message.error(this.$t("VALIDATION.phone"));
+          return;
+        } else if (!this.data.role) {
+          this.isWaitingRequest = false;
+          this.$message.error(this.$t("VALIDATION.role"));
+          return;
+        } else if (!this.data.password) {
+          this.isWaitingRequest = false;
+          this.$message.error(this.$t("VALIDATION.password"));
+          return;
+        } else if (this.data.password.length < 6) {
+          this.isWaitingRequest = false;
+          this.$message.error(this.$t("VALIDATION.passwordLength"));
+          return;
+        } else if (!this.data.passwordConfirmation) {
+          this.isWaitingRequest = false;
+          this.$message.error(this.$t("VALIDATION.password"));
+          return;
+        } else if (this.data.passwordConfirmation.length < 6) {
+          this.isWaitingRequest = false;
+          this.$message.error(this.$t("VALIDATION.passwordLength"));
+          return;
+        } else if (
+          this.data.password !=
+          this.data.passwordConfirmation
+        ) {
+          this.isWaitingRequest = false;
+          this.$message.error(this.$t("VALIDATION.notEqualPasswords"));
+          return;
+        } else {
+          this.submitForm();
+          return;
+        }
     },
     // End:: validate Form Inputs
 

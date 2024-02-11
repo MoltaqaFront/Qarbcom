@@ -250,6 +250,13 @@ export default {
         },
 
         {
+          text: this.$t("TABLES.Clients.joiningDate"),
+          value: "created_at",
+          align: "center",
+          sortable: false,
+        },
+
+        {
           text: this.$t("PLACEHOLDERS.status"),
           value: "is_active",
           align: "center",

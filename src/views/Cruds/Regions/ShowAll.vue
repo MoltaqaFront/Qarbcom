@@ -48,8 +48,8 @@
           </button>
         </div>
 
-        <div class="title_route_wrapper" v-if="$can('cities create', 'cities')">
-          <router-link to="/cities/create">
+        <div class="title_route_wrapper" v-if="$can('countries create', 'countries')">
+          <router-link to="/countries/create">
             {{ $t("SIDENAV.Cities.add") }}
           </router-link>
         </div>
@@ -85,7 +85,7 @@
         <!-- Start:: Activation -->
         <template v-slot:[`item.is_active`]="{ item }">
           <!-- v-if="permissions.activate" -->
-          <div class="activation" dir="ltr" style="z-index: 1" v-if="$can('cities activate', 'cities')">
+          <div class="activation" dir="ltr" style="z-index: 1" v-if="$can('countries activate', 'countries')">
             <v-switch class="mt-2" color="success" v-model="item.is_active" hide-details
               @change="changeActivationStatus(item)"></v-switch>
           </div>
@@ -96,7 +96,7 @@
         <template v-slot:[`item.actions`]="{ item }">
           <div class="actions">
 
-            <a-tooltip placement="bottom" v-if="$can('cities show', 'cities')">
+            <a-tooltip placement="bottom" v-if="$can('countries show', 'countries')">
               <template slot="title">
                 <span>{{ $t("BUTTONS.show") }}</span>
               </template>
@@ -105,7 +105,7 @@
               </button>
             </a-tooltip>
 
-            <a-tooltip placement="bottom" v-if="$can('cities edit', 'cities')">
+            <a-tooltip placement="bottom" v-if="$can('countries edit', 'countries')">
               <template slot="title">
                 <span>{{ $t("BUTTONS.edit") }}</span>
               </template>
@@ -114,7 +114,7 @@
               </button>
             </a-tooltip>
 
-            <a-tooltip placement="bottom" v-if="$can('cities delete', 'cities')">
+            <a-tooltip placement="bottom" v-if="$can('countries delete', 'countries')">
               <template slot="title">
                 <span>{{ $t("BUTTONS.delete") }}</span>
               </template>
@@ -302,7 +302,7 @@ export default {
     // Start:: Handel Filter
     async submitFilterForm() {
       if (this.$route.query.page !== '1') {
-        await this.$router.push({ path: '/cities/all', query: { page: 1 } });
+        await this.$router.push({ path: '/countries/all', query: { page: 1 } });
       }
       this.setTableRows();
     },
@@ -310,7 +310,7 @@ export default {
       this.filterOptions.title = null;
       this.filterOptions.is_active = null;
       if (this.$route.query.page !== '1') {
-        await this.$router.push({ path: '/cities/all', query: { page: 1 } });
+        await this.$router.push({ path: '/countries/all', query: { page: 1 } });
       }
       this.setTableRows();
     },
@@ -334,7 +334,7 @@ export default {
       try {
         let res = await this.$axios({
           method: "GET",
-          url: "cities",
+          url: "countries",
           params: {
             page: this.paginations.current_page,
             name: this.filterOptions.title,
@@ -358,7 +358,7 @@ export default {
       try {
         await this.$axios({
           method: "GET",
-          url: `cities/active/${item.id}`,
+          url: `countries/active/${item.id}`,
         });
         this.$message.success(this.$t("MESSAGES.changeActivation"));
       } catch (error) {
@@ -370,11 +370,11 @@ export default {
     // ==================== Start:: Crud ====================
     // ===== Start:: End
     editItem(item) {
-      this.$router.push({ path: `/cities/edit/${item.id}` });
+      this.$router.push({ path: `/countries/edit/${item.id}` });
     },
 
     showItem(item) {
-      this.$router.push({ path: `/cities/show/${item.id}` });
+      this.$router.push({ path: `/countries/show/${item.id}` });
     },
     // ===== End:: End
 
@@ -388,7 +388,7 @@ export default {
       try {
         await this.$axios({
           method: "DELETE",
-          url: `cities/${this.itemToDelete.id}`,
+          url: `countries/${this.itemToDelete.id}`,
         });
         this.dialogDelete = false;
         this.setTableRows();

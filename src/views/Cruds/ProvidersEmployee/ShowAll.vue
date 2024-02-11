@@ -248,7 +248,7 @@ export default {
         },
         {
           text: this.$t("PLACEHOLDERS.name_provider"),
-          value: "name",
+          value: "parent_name",
           align: "center",
           sortable: false,
         },
@@ -363,8 +363,8 @@ export default {
           url: "providerEmployees",
           params: {
             page: this.paginations.current_page,
-            name: nameParam,
-            user_name: this.filterOptions.user_name,
+            employeeParentName: nameParam,
+            name: this.filterOptions.user_name,
             mobile: this.filterOptions.phone,
             email: this.filterOptions.email,
             date: this.filterOptions.date,

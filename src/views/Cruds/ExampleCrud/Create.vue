@@ -506,7 +506,7 @@ export default {
       REQUEST_DATA.append("email", this.data.email);
       REQUEST_DATA.append("phone", this.data.mobileNumber);
       REQUEST_DATA.append("country_id", this.data.country.id);
-      REQUEST_DATA.append("city_id", this.data.city.id);
+      REQUEST_DATA.append("country_id", this.data.city.id);
       REQUEST_DATA.append("area_id", this.data.area.id);
       if (this.data.address) {
         REQUEST_DATA.append("address", this.data.address);

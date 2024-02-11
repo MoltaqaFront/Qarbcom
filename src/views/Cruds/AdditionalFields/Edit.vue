@@ -32,31 +32,31 @@
             v-model="data.field_type" />
           <!-- End:: Status Input -->
 
-          <div class="row justify-content-center">
-            <span class="add_another" @click="addRow()">
-              <i class="fas fa-plus"></i>
-            </span>
-          </div>
-
           <div v-if="(data.field_type && data.field_type.value == 'checkbox')
             || (data.field_type && data.field_type.value == 'radio')
             || (data.field_type && data.field_type.value == 'dropdown')">
 
+            <div class="row justify-content-center">
+              <span class="add_another" @click="addRow()">
+                <i class="fas fa-plus"></i>
+              </span>
+            </div>
+
             <div class="row align-items-center" v-for="(item, index) in field_values" :key="'o' + index">
 
               <div class="col-lg-5 col-12">
-                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameAr')"
-                  v-model.trim="item.field_value_ar" @input="validateInput" required />
+                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameAr')" v-model.trim="item.value_ar"
+                  required />
               </div>
               <div class="col-lg-5 col-12">
-                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameEn')"
-                  v-model.trim="item.field_value_en" @input="removeArabicCharacters" @copy="onCopy" @paste="onPaste"
+                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameEn')" v-model.trim="item.value_en"
                   required />
               </div>
 
               <div class="col-2">
                 <div class="all_actions">
-                  <span class="add_another" @click="removeRow(index)">
+                  <span class="add_another" @click="removeRow(index, item)"
+                    :class="{ 'disabled': index == 0 || index == 1 }">
                     <i class="fas fa-minus"></i>
                   </span>
 
@@ -112,20 +112,12 @@ export default {
         active: true,
         is_required: null,
         field_type: null,
-        vehicle_type: null
+        vehicle_type: null,
+        type: null,
       },
       allVehicleTypes: [],
 
-      field_values: [
-        {
-          field_value_ar: "",
-          field_value_en: ""
-        },
-        {
-          field_value_ar: "",
-          field_value_en: ""
-        }
-      ],
+      field_values: [],
       // End:: Data Collection To Send
 
       arabicRegex: /^[\u0600-\u06FF\s]+$/,
@@ -202,14 +194,24 @@ export default {
     addRow() {
       this.field_values.push(
         {
-          field_value_ar: "",
-          field_value_en: ""
+          value_ar: "",
+          value_en: ""
         }
       )
     },
 
-    removeRow(index) {
-      this.field_values.splice(index, 1)
+    async removeRow(index, item) {
+      this.field_values.splice(index, 1);
+      try {
+        await this.$axios({
+          method: "GET",
+          url: `additionalFields/${this.$route.params.id}/delete-additional-field-value/${item.id}`,
+        });
+        this.$message.success(this.$t("MESSAGES.deletedSuccessfully"));
+      } catch (error) {
+        this.dialogDelete = false;
+        this.$message.error(error.response.data.message);
+      }
     },
 
     validateInput() {
@@ -251,7 +253,7 @@ export default {
       REQUEST_DATA.append("name[en]", this.data.nameEn);
       REQUEST_DATA.append("is_active", +this.data.active);
       REQUEST_DATA.append("is_required", this.data.is_required?.id);
-      REQUEST_DATA.append("field_type", this.data.field_type?.value);
+      REQUEST_DATA.append("type", this.data.field_type?.value);
       REQUEST_DATA.append("_method", "put");
 
       if (this.data.vehicle_type) {
@@ -262,15 +264,32 @@ export default {
 
       if (this.field_values) {
         this.field_values.forEach((element, index) => {
-
-          if (element.field_value_ar) {
-            REQUEST_DATA.append(`field_values[${index}][ar]`, element.field_value_ar);
+          if (element.value_ar) {
+            REQUEST_DATA.append(`value[${index}][ar]`, element.value_ar);
           }
-          if (element.field_value_ar) {
-            REQUEST_DATA.append(`field_values[${index}][en]`, element.field_value_en);
+          if (element.value_ar) {
+            REQUEST_DATA.append(`value[${index}][en]`, element.value_en);
+          }
+          if (element.id) {
+            REQUEST_DATA.append(`value[${index}][id]`, element.id);
           }
         });
       }
+
+      // let valueArray = [];
+
+      // if (this.field_values) {
+      //   this.field_values.forEach((element, index) => {
+      //     valueArray.push({
+      //       'name_ar': element.value_ar,
+      //       'name_en': element.value_en,
+      //       'id': element.id
+      //     })
+      //   });
+      // }
+
+      // REQUEST_DATA.append('value', JSON.stringify(valueArray))
+      // console.log(valueArray)
 
       // Start:: Append Request Data
 
@@ -314,18 +333,19 @@ export default {
         this.data.nameAr = res.data.data.additionalField.name_ar;
         this.data.nameEn = res.data.data.additionalField.name_en;
         this.data.vehicle_type = res.data.data.additionalField.vehicleTypes;
-        this.field_values = res.data.data.additionalField.field_values;
+        this.field_values = res.data.data.additionalField.values;
         this.data.is_required = res.data.data.additionalField.is_required;
-        this.data.field_type = res.data.data.additionalField.field_type;
+        this.data.field_type = { id: 0, name: res.data.data.additionalField.translated_field_type, value: res.data.data.additionalField.type };
 
-        if (this.data.field_type) {
-          this.data.field_type =
-          {
-            id: 0,
-            name: this.data.field_type,
-            value: this.data.field_type,
-          }
-        }
+
+        // if (this.data.field_type) {
+        //   this.data.field_type =
+        //   {
+        //     id: 0,
+        //     name: this.data.field_type,
+        //     value: this.data.field_type,
+        //   }
+        // }
 
         if (!this.data.is_required) {
           this.data.is_required =
@@ -387,5 +407,10 @@ export default {
     color: #ff2159;
     cursor: pointer
   }
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: no-drop;
 }
 </style>

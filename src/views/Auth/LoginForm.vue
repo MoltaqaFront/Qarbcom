@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import { generatePermissions } from "@/plugins/ability.js";
 import firebase from 'firebase/app';
 import 'firebase/messaging';
 import { mapGetters, mapActions } from "vuex";
@@ -109,6 +108,7 @@ export default {
       REQUEST_DATA.append("email", this.loginData.email);
       REQUEST_DATA.append("password", this.loginData.password);
       REQUEST_DATA.append("fcm_token", this.loginData.device_token);
+
       // End:: Append Request Data (JSON)
 
       try {
@@ -151,23 +151,15 @@ export default {
 
     // get fcm token 
 
-    getFirebaseToken() {
-      firebase.messaging().requestPermission()
-        .then(() => {
-          // Permission granted, retrieve the token
-          return firebase.messaging().getToken();
-        })
-        .then((token) => {
-          // Use the token as needed
-
-          this.loginData.device_token = token;
-
-          // console.log('FCM Token:', token);
-        })
-        .catch((error) => {
-          // Handle any errors that occur
-          console.error('Error:', error);
-        })
+    async getFirebaseToken() {
+      const messaging = firebase.messaging();
+      try {
+        const token = await messaging.getToken(); // Get the FCM token
+        this.loginData.device_token = token;
+        // console.log('FCM token:', token);
+      } catch (error) {
+        console.error('Error requesting permission/token:', error);
+      }
     },
 
   },

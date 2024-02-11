@@ -18,122 +18,253 @@
           <base-input col="6" type="text" :placeholder="$t('TABLES.Orders.orderNumber')" v-model.trim="data.id"
             disabled />
           <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.status')" v-model.trim="data.status" disabled />
-          <base-input col="6" type="text" :placeholder="$t('TABLES.Orders.orderType')" v-model.trim="data.orderType"
-            disabled />
+
           <base-input col="6" type="text" :placeholder="$t('TABLES.Products.created_at')" v-model.trim="data.orderDate"
             disabled />
 
-          <div class="form_title_wrapper">
-            <h4> {{ $t('PLACEHOLDERS.store_data') }}</h4>
+          <div class="row">
+
+            <h5>{{ $t("PLACEHOLDERS.provider_info") }}</h5>
+
+            <base-image-upload-input col="12" identifier="provider" :placeholder="$t('PLACEHOLDERS.image')"
+              :preSelectedImage="data.provider_image.path" disabled class="disabled_input" />
+
+            <!-- Start:: Name Input -->
+            <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.name_provider')"
+              v-model.trim="data.provider_name" />
+            <!-- End:: Name Input -->
+
+            <!-- Start:: Name Input -->
+            <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.provider_code')"
+              v-model.trim="data.provider_code" disabled />
+            <!-- End:: Name Input -->
+
+            <h5>{{ $t("PLACEHOLDERS.boat_data") }}</h5>
+
+            <base-image-upload-input col="12" identifier="boat_image" :placeholder="$t('PLACEHOLDERS.boat_image')"
+              :preSelectedImage="data.boat_image.path" disabled />
+
+            <!-- Start:: Name Input -->
+            <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.plate_number')"
+              v-model.trim="data.plate_number" disabled />
+            <!-- End:: Name Input -->
+            <!-- Start:: Name Input -->
+            <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.vechile_name')"
+              v-model.trim="data.vechile_name" disabled />
+            <!-- End:: Name Input -->
+            <!-- Start:: Name Input -->
+            <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.type_vechile')"
+              v-model.trim="data.type_vechile" disabled />
+            <!-- End:: Name Input -->
+
           </div>
 
-          <!-- Start:: Image Upload Input -->
-          <base-image-upload-input col="12" identifier="image" :preSelectedImage="data.image.path"
-            :placeholder="$t('PLACEHOLDERS.image')" disabled />
-          <!-- End:: Image Upload Input -->
-
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.store_name')" v-model.trim="data.store_name"
-            disabled />
-
           <div class="form_title_wrapper">
-            <h4> {{ $t('PLACEHOLDERS.client_data') }}</h4>
+            <h4>{{ $t('PLACEHOLDERS.departure_from') }}</h4>
           </div>
 
-          <base-input col="6" type="text" :placeholder="$t('TABLES.Clients.name')" v-model.trim="data.client_name"
-            disabled />
-          <base-input col="6" type="text" :placeholder="$t('TABLES.Clients.phone')" v-model.trim="data.client_phone"
-            disabled />
-
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.receiver_phone')"
-            v-model.trim="data.receiver_phone" disabled />
-
-          <div class="form_title_wrapper">
-            <h4>{{ $t('PLACEHOLDERS.location_address') }}</h4>
-          </div>
-
-          <base-input col="6" type="text" :placeholder="$t('TABLES.Addresses.address')"
-            v-model.trim="data.address_location_from" disabled />
-          <base-input col="6" type="text" :placeholder="$t('TABLES.Addresses.address')"
-            v-model.trim="data.address_location_to" disabled />
+          <base-input col="6" type="text" disabled :placeholder="$t('TABLES.Cities.name')"
+            v-model.trim="data.country_name" />
+          <base-input col="6" type="text" disabled :placeholder="$t('TABLES.Addresses.area')"
+            v-model.trim="data.district_name" />
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.marina')" v-model.trim="data.marina" />
+          <base-input col="6" type="text" disabled :placeholder="$t('PLACEHOLDERS.distinctive_mark')"
+            v-model.trim="data.distinctive_mark" />
 
           <div class="form_title_wrapper">
-            <h4>{{ $t('PLACEHOLDERS.driver_data') }}</h4>
+            <h4>{{ $t('PLACEHOLDERS.location_icon') }}</h4>
+            <div class="map_icon">
+              <i class="fas fa-map"></i>
+            </div>
           </div>
 
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.driverName')" v-model="data.driver_name"
-            disabled />
-          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.driver_phone')" v-model="data.driver_phone"
-            disabled />
+
+          <div class="row">
+            <div class="form_title_wrapper">
+              <h4>{{ $t('PLACEHOLDERS.departure_to') }}</h4>
+            </div>
+
+            <base-input col="6" type="text" :placeholder="$t('TABLES.Cities.name')" v-model.trim="data.country_name_to"
+              disabled />
+            <base-input col="6" type="text" :placeholder="$t('TABLES.Addresses.area')"
+              v-model.trim="data.district_name_to" disabled />
+            <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.marina')" v-model.trim="data.marina_to"
+              disabled />
+            <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.distinctive_mark')"
+              v-model.trim="data.distinctive_mark_to" disabled />
+
+            <div class="form_title_wrapper">
+              <h4>{{ $t('PLACEHOLDERS.location_icon') }}</h4>
+              <div class="map_icon">
+                <i class="fas fa-map"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" v-if="data.trip_type == 'delivery'">
+            <div class="col-12">
+              <div class="form_title_wrapper">
+                <h4>{{ $t('PLACEHOLDERS.pricing') }}</h4>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <base-input disabled col="12" type="text" :placeholder="$t('PLACEHOLDERS.price_per_individual')"
+                v-model.trim="data.price_per_individual" />
+            </div>
+          </div>
+
+          <div class="row" v-if="(data.trip_type == 'rent') && (data.booking_type && data.booking_type == 'private')">
+            <div class="col-12">
+              <div class="form_title_wrapper">
+                <h4>{{ $t('PLACEHOLDERS.pricing') }}</h4>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <base-input disabled col="12" type="text" :placeholder="$t('PLACEHOLDERS.price_per_hour')"
+                v-model.trim="data.price_per_hour" />
+            </div>
+            <div class="col-lg-6 col-12">
+              <base-input disabled col="12" type="text" :placeholder="$t('PLACEHOLDERS.price_per_day')"
+                v-model.trim="data.price_per_day" />
+            </div>
+            <div class="col-lg-6 col-12">
+              <base-input disabled col="12" type="text" :placeholder="$t('PLACEHOLDERS.price_per_week')"
+                v-model.trim="data.price_per_week" />
+            </div>
+            <div class="col-lg-6 col-12">
+              <base-input disabled col="12" type="text" :placeholder="$t('PLACEHOLDERS.price_per_month')"
+                v-model.trim="data.price_per_month" />
+            </div>
+          </div>
+
+          <div class="row" v-if="(data.trip_type == 'rent') && (data.booking_type && data.booking_type == 'individual')">
+            <div class="col-12">
+              <div class="form_title_wrapper">
+                <h4>{{ $t('PLACEHOLDERS.pricing') }}</h4>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <base-input disabled col="12" type="text" :placeholder="$t('PLACEHOLDERS.price_per_individual_hour')"
+                v-model.trim="data.price_per_hour" />
+            </div>
+            <div class="col-lg-6 col-12">
+              <base-input disabled col="12" type="text" :placeholder="$t('PLACEHOLDERS.price_per_individual_day')"
+                v-model.trim="data.price_per_day" />
+            </div>
+            <div class="col-lg-6 col-12">
+              <base-input disabled col="12" type="text" :placeholder="$t('PLACEHOLDERS.price_per_individual_week')"
+                v-model.trim="data.price_per_week" />
+            </div>
+            <div class="col-lg-6 col-12">
+              <base-input disabled col="12" type="text" :placeholder="$t('PLACEHOLDERS.price_per_individual_month')"
+                v-model.trim="data.price_per_month" />
+            </div>
+          </div>
+
 
           <div class="form_title_wrapper">
-            <h4>{{ $t('PLACEHOLDERS.price_data') }}</h4>
+            <h4>{{ $t('PLACEHOLDERS.trip_data') }}</h4>
           </div>
+
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.trip_type')" v-model.trim="data.trip_type"
+            disabled />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.booking_type')" v-model.trim="data.booking_type"
+            disabled />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.trip_date')" v-model.trim="data.trip_date"
+            disabled />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.duration')" v-model.trim="data.duration"
+            disabled />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.arrival_time')" v-model.trim="data.arrival_time"
+            disabled />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.departure_time')"
+            v-model.trim="data.departure_time" disabled />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.return_time')" v-model.trim="data.return_time"
+            disabled />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.return_date')" v-model.trim="data.return_date"
+            disabled />
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.number_of_individuals')"
+            v-model.trim="data.n_of_passengers" disabled />
+
+
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.total_companion_service_price')"
+            v-model.trim="data.total_companion_service_price" disabled />
+
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.value_added_tax')"
+            v-model.trim="data.value_added_tax" disabled />
+
+          <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.total_trip_price')"
+            v-model.trim="data.total_trip_price" disabled />
+
+          <base-input col="6" type="text" :placeholder="$t('TABLES.Orders.totalPrice')" v-model.trim="data.totalPrice"
+            disabled />
+
+          <div v-if="data.companion_service.length">
+            <div class="form_title_wrapper">
+              <h4>{{ $t('PLACEHOLDERS.companion_services') }}</h4>
+            </div>
+
+            <div class="row" v-for="(item, index) in data.companion_service" :key="'p' + index">
+              <div class="col-lg-6 col-12">
+                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.companion_service_name')"
+                  v-model.trim="item.name" disabled />
+              </div>
+              <div class="col-lg-6 col-12">
+                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.companion_service_price')"
+                  v-model.trim="item.price" disabled />
+              </div>
+            </div>
+          </div>
+
+          <div class="form_title_wrapper" v-if="data.trip_description !== 'null'">
+            <h4>{{ $t('PLACEHOLDERS.trip_description') }}</h4>
+          </div>
+
+          <base-input v-if="data.trip_description !== 'null'" col="6" rows="6" type="textarea" disabled
+            :placeholder="$t('PLACEHOLDERS.trip_description')" v-model="data.trip_description" />
+
+          <div class="form_title_wrapper" v-if="data.guidelines !== 'null'">
+            <h4>{{ $t('PLACEHOLDERS.guidelines') }}</h4>
+          </div>
+
+          <base-input v-if="data.guidelines !== 'null'" col="7" rows="6" type="textarea" disabled
+            :placeholder="$t('PLACEHOLDERS.guidelines')" v-model="data.guidelines" />
 
           <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.payment_method_brand')"
             v-model="data.payment_method_brand" disabled />
-          <base-input col="6" type="text" :placeholder="$t('TABLES.Services.price')" v-model="data.price" disabled />
 
-          <div class="all_content" v-if="data.order_type_id !== 3 && parents.length > 1">
-            <h3 class="text-center">{{ $t('BUTTONS.additions') }}</h3>
-
-            <div class="row repeat_parent" v-for="(parent, parentIndex) in parents" :key="'a' + parentIndex"
-              style="border: 2px solid #F6A513;margin-bottom:20px;border-radius: 10px;">
-
-              <div class="col-lg-6 col-12">
-                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameAr')" v-model.trim="parent.nameAr"
-                  disabled />
-              </div>
-
-              <div class="col-lg-6 col-12">
-                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameEn')" v-model.trim="parent.nameEn"
-                  disabled />
-              </div>
-
-              <div class="col-lg-6 col-12">
-
-                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.item_name')"
-                  v-model.trim="parent.is_multiple_choice.name" disabled />
-
-              </div>
-              <div class="col-lg-6 col-12">
-
-                <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.required_item')"
-                  v-model.trim="parent.is_required.name" disabled />
-
-              </div>
-
-              <div class="col-12">
-                <h3 class="text-center">{{ $t('BUTTONS.components') }}</h3>
-              </div>
-
-
-              <div class="row repeat_child align-items-center" v-for="(child, childIndex) in parent.additions_children"
-                :key="'b' + childIndex">
-                <div class="col-lg-6 col-12">
-                  <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameAr')" v-model.trim="child.nameAr"
-                    disabled />
-                </div>
-                <div class="col-lg-6 col-12">
-                  <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameEn')" v-model.trim="child.nameEn"
-                    disabled />
-                </div>
-                <div class="col-lg-6 col-12">
-                  <base-input type="text" :placeholder="$t('PLACEHOLDERS.price')" v-model.trim="child.price" disabled />
-                </div>
-
-              </div>
-
+          <div class="row" v-if="data.status_key == 'cancelled' || data.status_key == 'rejected'">
+            <div class="form_title_wrapper">
+              <h4>{{ $t('PLACEHOLDERS.cancel_reject_request') }}</h4>
             </div>
 
+            <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.customer_refund_amount')"
+              v-model="data.total_price_after_commission" disabled />
+
+            <base-input col="6" type="text" :placeholder="$t('PLACEHOLDERS.cancel_reject_commission')"
+              v-model="data.commission" disabled />
+
+            <base-input col="6" rows="6" type="textarea" disabled :placeholder="$t('PLACEHOLDERS.reason')"
+              v-model="data.status_reason" required />
+
           </div>
 
-          <div class="form_title_wrapper" v-if="status_key == 'rejected'">
-            <h4>{{ $t('PLACEHOLDERS.reason_reject') }}</h4>
+          <div class="row" v-if="data.rates.length > 0">
+            <div class="form_title_wrapper">
+              <h4>{{ $t('PLACEHOLDERS.order_rating') }}</h4>
+            </div>
+
+            <div class="row align-items-center" v-for="(rate, index) in data.rates" :key="'p' + index">
+
+              <div class="d-flex justify-content-start">
+                <RatingPreview :rate="+rate.rate" :size="15" />
+              </div>
+
+
+              <base-input col="3" rows="3" type="textarea" disabled :placeholder="$t('PLACEHOLDERS.comment')"
+                v-model="rate.comment" required />
+
+            </div>
           </div>
-
-          <base-input v-if="status_key == 'rejected'" col="6" rows="6" type="textarea" disabled
-            :placeholder="$t('PLACEHOLDERS.reason')" v-model="reason_reject" required />
-
 
         </div>
       </form>
@@ -143,8 +274,13 @@
 </template>
 
 <script>
+import RatingPreview from "@/components/ui/RatingPreview.vue";
 export default {
   name: "CreateProduct",
+
+  components: {
+    RatingPreview,
+  },
 
   data() {
     return {
@@ -159,181 +295,154 @@ export default {
 
         order_type_id: null,
 
+        total_companion_service_price: null,
+        value_added_tax: null,
+        total_trip_price: null,
+        totalPrice: null,
+
+        price_per_hour: null,
+        price_per_day: null,
+        price_per_week: null,
+        price_per_month: null,
+
+        price_per_individual: null,
+
         // order info
 
         id: null,
         status: null,
-        orderType: null,
+        status_key: null,
         orderDate: null,
+
+        rates: [],
+        status_reason: '',
+        commission: '',
+        total_price_after_commission: '',
 
         // store info
 
-        store_name: null,
-        image: {
+        provider_image: {
+          path: null,
+          file: null,
+        },
+        boat_image: {
           path: null,
           file: null,
         },
 
-        // address location
-        address_location_from: null,
-        address_location_to: null,
+        provider_name: null,
+        provider_code: null,
 
+        n_of_passengers: null,
 
+        companion_service: [],
 
+        plate_number: null,
+        vechile_name: null,
+        type_vechile: null,
+        country_name: null,
+        district_name: null,
+        marina: null,
+        distinctive_mark: null,
+        country_name_to: null,
+        district_name_to: null,
+        marina_to: null,
+        distinctive_mark_to: null,
 
-        // client info
-
-        client_name: null,
-        client_phone: null,
-        receiver_phone: null,
-
-        // driver info
-
-        driver_name: null,
-        driver_phone: null,
-
-        category: null,
-        storeType: null,
-
-        payment_method_brand: '',
-        price: ''
+        trip_type: null,
+        booking_type: null,
+        trip_date: null,
+        duration: null,
+        duration_type: null,
+        arrival_time: null,
+        departure_time: null,
+        return_time: null,
+        return_date: null,
+        trip_description: null,
+        guidelines: null,
+        payment_method_brand: null,
+        customer_refund_amount: null,
+        cancel_reject_commission: null,
+        review_rate: null,
+        comment: null,
 
       },
 
-
-      // product info
-
-      parents: [
-        {
-          nameAr: '',
-          nameEn: '',
-          is_multiple_choice: '',
-          is_required: '',
-          additions_children: [],
-        },
-      ],
-      multiple_choice: [],
-      is_required: [],
-
-      // End:: Data Collection To Send
-
-      allStores: [],
-      allCategories: [],
-
-      status_key: null,
-      reason_reject: null
 
 
     };
   },
 
-  computed: {
-    multipleStatus() {
-      return [
-        {
-          id: 1,
-          name: this.$t("PLACEHOLDERS.yes"),
-          value: 1,
-        },
-        {
-          id: 0,
-          name: this.$t("PLACEHOLDERS.no"),
-          value: 0,
-        },
-      ];
-    },
-    requiredStatus() {
-      return [
-        {
-          id: 1,
-          name: this.$t("PLACEHOLDERS.yes"),
-          value: 1,
-        },
-        {
-          id: 0,
-          name: this.$t("PLACEHOLDERS.no"),
-          value: 0,
-        },
-      ];
-    },
-  },
-
   methods: {
-
-    // start get all stores
-
-    async getAllStores() {
-      this.loading = true;
-      try {
-        let res = await this.$axios({
-          method: "GET",
-          url: "admin/stores",
-        });
-        this.allStores = res.data.body.stores;
-        console.log(res.data.body.stores)
-      } catch (error) {
-        this.loading = false;
-        console.log(error.response.data.message);
-      }
-    },
-    async getAllCategories() {
-      this.loading = true;
-      try {
-        let res = await this.$axios({
-          method: "GET",
-          url: "admin/stores/types/categories",
-        });
-        this.allCategories = res.data.body.orderTypes;
-        console.log(res.data.body.orderTypes)
-      } catch (error) {
-        this.loading = false;
-        console.log(error.response.data.message);
-      }
-    },
-    // end get all stores
 
     async getDataToEdit() {
       this.loading = true;
       try {
         let res = await this.$axios({
           method: "GET",
-          url: `admin/orders/${this.$route.params.id}`,
+          url: `orders/${this.$route.params.id}`,
         });
-
-
-
         // order info
 
-        this.data.order_type_id = res.data.body.order.order_type.id;
+        this.data.id = res.data.data.Order.id;
 
-        this.data.id = res.data.body.order.id;
-        this.data.status = res.data.body.order.status;
-        this.data.orderType = res.data.body.order.order_type.title;
-        this.data.orderDate = res.data.body.order.created_at;
+        this.data.status = res.data.data.Order.status;
+        this.data.status_key = res.data.data.Order.status_key;
+        this.data.orderDate = res.data.data.Order.created_at;
+
+        this.data.provider_image.path = res.data.data.Order.provider.image;
+        this.data.provider_name = res.data.data.Order.provider.name;
+        this.data.provider_code = res.data.data.Order.provider.code;
+
+        this.data.boat_image.path = res.data.data.Order.vehicle.image;
+        this.data.plate_number = res.data.data.Order.vehicle.license_plate;
+        this.data.vechile_name = res.data.data.Order.vehicle.name;
+        this.data.type_vechile = res.data.data.Order.vehicle.type;
+        this.data.companion_service = res.data.data.Order.additional_services_name;
+
+        this.data.country_name = res.data.data.Order.from_country_name;
+        this.data.district_name = res.data.data.Order.from_district_name;
+        this.data.marina = res.data.data.Order.from_anchor_name;
+        // this.data.distinctive_mark = res.data.data.Order.vehicle.type;
+
+        this.data.country_name_to = res.data.data.Order.to_country_name;
+        this.data.district_name_to = res.data.data.Order.to_district_name;
+        this.data.marina_to = res.data.data.Order.to_anchor_name;
+        // this.data.distinctive_mark_to = res.data.data.Order.vehicle.type;
 
 
-        this.data.client_name = res.data.body.order.user.name;
-        this.data.client_phone = res.data.body.order.user.phone;
-        this.data.receiver_phone = res.data.body.order.receiver_phone;
+        this.data.trip_type = res.data.data.Order.trip_type;
+        this.data.booking_type = res.data.data.Order.booking_type;
+        this.data.trip_date = res.data.data.Order.trip_date;
+        this.data.n_of_passengers = res.data.data.Order.n_of_passengers;
 
-        this.data.address_location_from = res.data.body.order.fast_addresses.from;
-        this.data.address_location_to = res.data.body.order.fast_addresses.to;
+        this.data.duration = res.data.data.Order.duration + res.data.data.Order.duration_type;
+        this.data.duration_type = res.data.data.Order.duration_type;
+        this.data.return_time = res.data.data.Order.return_time;
+        this.data.return_date = res.data.data.Order.return_date;
+        this.data.trip_description = res.data.data.Order.vehicle.trip_description;
+        this.data.guidelines = res.data.data.Order.vehicle.trip_instructions;
+        this.data.payment_method_brand = res.data.data.Order.payment_method;
 
-        this.data.store_name = res.data.body.order.store?.title;
-        this.data.image.path = res.data.body.order.store?.logo;
+        this.data.arrival_time = res.data.data.Order.attendance_time;
+        this.data.departure_time = res.data.data.Order.departure_time;
 
-        this.status_key = res.data.body.order.status_key;
-        this.reason_reject = res.data.body.order.last_status.reason;
+        this.data.rates = res.data.data.Order.rates;
+        this.data.status_reason = res.data.data.Order.status_reason;
+        this.data.commission = res.data.data.Order.commission;
+        this.data.total_price_after_commission = res.data.data.Order.total_price_after_commission;
 
-        this.data.driver_name = res.data.body.order.driver?.name;
-        this.data.driver_phone = res.data.body.order.driver?.phone;
+        this.data.price_per_individual = res.data.data.Order.vehicle_price.delivery_trip_price_per_person;
+        this.data.price_per_hour = res.data.data.Order.vehicle_price.rental_hourly_price;
+        this.data.price_per_day = res.data.data.Order.vehicle_price.rental_daily_price;
+        this.data.price_per_week = res.data.data.Order.vehicle_price.rental_weekly_price;
+        this.data.price_per_month = res.data.data.Order.vehicle_price.rental_monthly_price;
 
-        this.data.payment_method_brand = res.data.body.order.payment_method_brand;
-        this.data.price = res.data.body.order?.price;
+        this.data.total_companion_service_price = res.data.data.Order.additional_services_price;
+        this.data.value_added_tax = res.data.data.Order.tax_rate;
+        this.data.total_trip_price = res.data.data.Order.total_trip_price;
+        this.data.totalPrice = res.data.data.Order.total_price;
 
-        this.parents = res.data.body.order.order_items;
-
-        console.log(res.data.body.order.status_key)
       } catch (error) {
         this.loading = false;
         console.log(error.response.data.message);
@@ -343,12 +452,6 @@ export default {
   },
 
   async created() {
-    // Start:: Fire Methods
-    await this.$store.dispatch("PermissionsModule/checkRoutePermissions", "products create");
-    // End:: Fire Methods
-
-    this.getAllStores();
-    this.getAllCategories();
     this.getDataToEdit()
   },
 };
@@ -381,6 +484,12 @@ export default {
     font-size: 25px;
     color: red;
     cursor: pointer;
+  }
+}
+
+.map_icon {
+  i {
+    font-size: 30px;
   }
 }
 </style>

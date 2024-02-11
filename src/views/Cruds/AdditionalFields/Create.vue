@@ -29,14 +29,18 @@
 
           <!-- Start:: Status Input -->
           <base-select-input col="6" :optionsList="Fields_type" :placeholder="$t('PLACEHOLDERS.additional_field_type')"
-            v-model="data.field_type" />
+            v-model="data.field_type" @input="clearFields" />
           <!-- End:: Status Input -->
 
           <div v-if="(data.field_type && data.field_type.value == 'checkbox')
             || (data.field_type && data.field_type.value == 'radio')
             || (data.field_type && data.field_type.value == 'dropdown')">
 
-            <div class="row align-items-center" v-for="(item, index) in field_values" :key="'o' + index">
+            <span class="add_another" @click="addRow(index)">
+              <i class="fas fa-plus"></i>
+            </span>
+
+            <div class="row align-items-center" v-for="(item, index) in  field_values " :key="'o' + index">
 
               <div class="col-lg-5 col-12">
                 <base-input col="12" type="text" :placeholder="$t('PLACEHOLDERS.nameAr')" v-model.trim="item.field_ar"
@@ -49,7 +53,7 @@
 
               <div class="col-2">
                 <div class="all_actions">
-                  <span class="add_another" @click="removeRow(index)">
+                  <span class="add_another" @click="removeRow(index)" :class="{ 'disabled': index == 0 || index == 1 }">
                     <i class="fas fa-minus"></i>
                   </span>
 
@@ -218,6 +222,19 @@ export default {
       this.data.image = selectedImage;
     },
 
+    clearFields() {
+      this.field_values = [
+        {
+          field_ar: "",
+          field_en: ""
+        },
+        {
+          field_ar: "",
+          field_en: ""
+        }
+      ]
+    },
+
     // Start:: validate Form Inputs
     validateFormInputs() {
       this.isWaitingRequest = true;
@@ -245,7 +262,7 @@ export default {
       REQUEST_DATA.append("name[en]", this.data.nameEn);
       REQUEST_DATA.append("is_active", +this.data.active);
       REQUEST_DATA.append("is_required", this.data.is_required?.id);
-      REQUEST_DATA.append("field_type", this.data.field_type?.value);
+      REQUEST_DATA.append("type", this.data.field_type?.value);
 
       if (this.data.vehicle_type) {
         this.data.vehicle_type.forEach(element => {
@@ -257,10 +274,10 @@ export default {
         this.field_values.forEach((element, index) => {
 
           if (element.field_ar) {
-            REQUEST_DATA.append(`field_values[${index}][ar]`, element.field_ar);
+            REQUEST_DATA.append(`value[${index}][ar]`, element.field_ar);
           }
           if (element.field_ar) {
-            REQUEST_DATA.append(`field_values[${index}][en]`, element.field_en);
+            REQUEST_DATA.append(`value[${index}][en]`, element.field_en);
           }
         });
       }
@@ -278,7 +295,7 @@ export default {
         this.$router.push({ path: "/additionalFields/all" });
       } catch (error) {
         this.isWaitingRequest = false;
-        this.$message.error(error.response.data.errors);
+        this.$message.error(error.response.data.message);
       }
     },
     // End:: Submit Form
@@ -330,5 +347,10 @@ export default {
     color: #ff2159;
     cursor: pointer
   }
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: no-drop;
 }
 </style>

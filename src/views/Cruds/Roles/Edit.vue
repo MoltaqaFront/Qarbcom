@@ -27,7 +27,7 @@
           <!-- Start:: Permissions -->
           <div class="col-12">
             <div class="row" v-if="allSystemPermissions">
-              <div v-for="permission in allSystemPermissions" :key="permission.id" class="col-md-4">
+              <div v-for="permission in allSystemPermissions" :key="permission.id" class="col-md-6">
                 <div class="permission_card_wrapper">
                   <p class="card_title"> {{ permission.name }} </p>
                   <div class="card_body">

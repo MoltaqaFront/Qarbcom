@@ -96,12 +96,12 @@ export default {
       try {
         await this.$axios({
           method: "POST",
-          url: `cities`,
+          url: `countries`,
           data: REQUEST_DATA,
         });
         this.isWaitingRequest = false;
         this.$message.success(this.$t("MESSAGES.addedSuccessfully"));
-        this.$router.push({ path: "/cities/all" });
+        this.$router.push({ path: "/countries/all" });
       } catch (error) {
         this.isWaitingRequest = false;
         this.$message.error(error.response.data.message);

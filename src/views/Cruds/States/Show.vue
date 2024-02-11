@@ -76,7 +76,7 @@ export default {
         });
         this.data.nameAr = res.data.data.district.name_ar;
         this.data.nameEn = res.data.data.district.name_en;
-        this.data.city_id = res.data.data.district.city;
+        this.data.city_id = res.data.data.district.country;
         this.data.active = res.data.data.district.is_active;
       } catch (error) {
         this.loading = false;
